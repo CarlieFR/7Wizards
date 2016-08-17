@@ -14,6 +14,7 @@
 #define FIRE_MAGIC "fireball.pcx"
 #define ICE_MAGIC "ice.pcx"
 #define BAR "actionbar.pcx"
+#define BATTLE_BG_PCX "battle_bg.pcx"
 #define P1PAL 0
 #define P2PAL 1
 #define NUMPAL 2

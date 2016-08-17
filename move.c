@@ -264,7 +264,7 @@ manage_move() {
 	}
   
   if (direction != 0 && nb_monsters > 0) {
-    if ((rand() % 200) < (monster / 10)) {
+    if ((rand() % 300) < (monster / 10)) {
       spr_hide();
       
       monsterID=1;
@@ -284,92 +284,65 @@ manage_move() {
   }
 }
 
-go_left(/*counters_c, size_c, counters_i, size_i*/)
-/*char counters_c[], size_c, size_i;
-int counters_i[];*/
-{
+go_left() {
+  /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
+  if (!direction) {
+    meter++;
+    monster++;
+  }
   if (!(direction & (DIR_LEFT | DIR_RIGHT))) {
     direction = direction | DIR_LEFT;
     SPRPATTERN=LFT_Face+pattern;
     spriteX--;
     spr_x(spriteX);
-    meter++;
-    monster++;
     manage_events();
   }
-  /*for(i=0; i<size_c; i++) {
-	counters_c[i]++;
-  }
-  
-  for(i=0; i<size_i; i++) {
-	counters_i[i]++;
-  }*/
 }
 
-go_right(/*counters_c, size_c, counters_i, size_i*/)
-/*char counters_c[], size_c, size_i;
-int counters_i[];*/
-{
+go_right() {
+  /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
+  if (!direction) {
+    meter++;
+    monster++;
+  }
   if (!(direction & (DIR_LEFT | DIR_RIGHT))) {
     direction = direction | DIR_RIGHT;
     SPRPATTERN=RGT_Face+pattern;
     spriteX++;
     spr_x(spriteX);
-    meter++;
-    monster++;
     manage_events();
   }
-  /*for(i=0; i<size_c; i++) {
-	counters_c[i]++;
-  }
-  
-  for(i=0; i<size_i; i++) {
-	counters_i[i]++;
-  }*/
 }
 
-go_up(/*counters_c, size_c, counters_i, size_i*/)
-/*char counters_c[], size_c, size_i;
-int counters_i[];*/
-{
+go_up() {
+  /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
+  if (!direction) {
+    meter++;
+    monster++;
+  }
   if (!(direction & (DIR_UP | DIR_DOWN))) {
     direction = direction | DIR_UP;
     SPRPATTERN=BK_Face+pattern;
     spriteY--;
     spr_y(spriteY);
-    meter++;
-    monster++;
     manage_events();
   }
-  /*for(i=0; i<size_c; i++) {
-	counters_c[i]++;
-  }
-  
-  for(i=0; i<size_i; i++) {
-	counters_i[i]++;
-  }*/
 }
 
-go_down(/*counters_c, size_c, counters_i, size_i*/)
-/*char counters_c[], size_c, size_i;
-int counters_i[];*/
-{
+go_down() {
+  /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
+  if (!direction) {
+    meter++;
+    monster++;
+  }
+  
   if (!(direction & (DIR_UP | DIR_DOWN))) {
     direction = direction | DIR_DOWN;
     SPRPATTERN=FR_Face+pattern;
     spriteY++;
     spr_y(spriteY);
-    meter++;
-    monster++;
     manage_events();
   }
-  /*for(i=0; i<size_c; i++) {
-	counters_c[i]++;
-  }
-  
-  for(i=0; i<size_i; i++) {
-	counters_i[i]++;
-  }*/
 }
 
 manage_events() {
@@ -526,262 +499,4 @@ move() {
   return -1;
 }
 
-/**********************************************/
-/*           map 1 movement system            */
-/**********************************************/
-/*move1()
-{
-  char i;
-  
-  map1();
-  
-  positive_pattern=1;
-  pattern=0;
-  meter = 0;
-  spr_set(0);
-  spr_show();
-  SPRPATTERN=FR_Face;
-  spr_pattern(SPRPATTERN);
-  if(battleEnd)
-  {
-    music1Init();
-    battleEnd=0;
-  }
-  
-  while(!(JOY_STRT & joytrg(0))) {
-    satb_update();
-    rand();
 
-    manage_move();
-	
-    if ((spriteX<96) && (spriteX>64) && (spriteY<144) && (spriteY>112))	{
-      spriteX=16;
-      spriteY=16;
-      spr_x(spriteX);
-      spr_y(spriteY);
-      spr_hide();
-      satb_update();
-      border(0,0,32,10);
-      blank(1,1,30,8);
-      put_string("You are under attack!",2,2);
-      for(i=0;i<30;i++)
-      {
-        music_update();
-        vsync(1);
-      }
-      put_char('>',30,8);
-      while(!(joytrg(0) & JOY_STRT))
-      {
-        music_update();
-        vsync();
-      }
-      silence();
-      /*battle(LIFEMAX*2/3+rand()%(LIFEMAX/3),ATK,DEF,DEX,50,0);*/
-      /*monsterID=0;
-      /*battle();*/
-      /*cd_execoverlay(OVL_BATTLE);
-      /*spr_set(0);
-      map1();
-      spr_show();
-      satb_update();
-    }*/
-   /* if (spriteX>239) {
-		spriteX=2; spr_x(spriteX); return 2;
-	}*/
-  /*  manage_pattern();
-    music_update();
-    vsync();
-  }
-  return -1;
-}*/
-
-/***********************************************/
-/*move2()
-{
-  char resist;
-  int enemyres;
-  map2();
-  monster=0;
-  meter=0;
-  positive_pattern=1;
-  enemyres=0;
-  pattern=0;
-
-  spr_set(0);
-  spr_show();
-  SPRPATTERN=FR_Face;
-  if(battleEnd)
-  {
-    music1Init();
-    battleEnd=0;
-  }
-
-  while(!(JOY_STRT & joytrg(0))) {
-    satb_update();
-    
-	manage_move();
-	
-      if (spriteY>210)
-	{spriteY=3; spr_y(spriteY); return 3;}
-      if (spriteX<1)
-	{spriteX=238; spr_x(spriteX); return 1;}
-      if (!(monster % 10))
-	{
-	 if ((rand() % 200) < (monster / 10))
-	 {
-	  spr_hide();
-	  /*resist=rand()&0xf;
-	  if (resist&0x1) enemyres=(1<<(rand()&3+1));
-	  if (resist&0x2) enemyres+=(1<<(rand()&3+5));
-	  if (resist&0x4) enemyres+=(1<<(rand()&3+9));
-	  if (resist&0x8) enemyres+=(1<<(rand()&3+13));*/
-	/*  monsterID=1;
-	  monster=0;
-	  /*battle();*/
-	/*  cd_execoverlay(OVL_BATTLE);
-
-	  /*spr_show;
-	  spr_x(spriteX);
-	  spr_y(spriteY);
-	  map2();
-	  music1Init();
-	  satb_update();*/
-/*	 }
-	}
-    manage_pattern();
-      music_update();
-      vsync();
-    }
-  return -1;
-}*/
-/***********************************************/
-/*move3()
-{
-
-  meter=0;
-  positive_pattern=1;
-  SPRPATTERN=FR_Face;
-  pattern=0;
-  map3();
-  
-  while(!(JOY_STRT & joytrg(0))) {
-    satb_update();
-    
-	manage_move();
-	
-      if (spriteY<1)
-	{spriteY=207; spr_y(spriteY); return 2;}
-      if (spriteY>210)
-	{spriteY=2; spr_y(spriteY); return 4;}
-      if ((spriteX>197) && (spriteY>181))
-	{
-	  silence();
-	  spr_hide();
-	  satb_update();
-	  help();
-	  spriteX=100;
-	  spriteY=100;
-	  spr_x(spriteX);
-	  spr_y(spriteY);
-	  spr_show();
-	  satb_update();
-	  map3();
-	}
-    manage_pattern();
-      music_update();
-      vsync();
-    }
-  return -1;
-}*/
-/**************************************/
-/*move4()
-{
-
-  map4();
-  
-  SPRPATTERN=FR_Face;
-  positive_pattern=1;
-  meter=0;
-  pattern=0;
-
-  silence();
-  spr_hide();
-  satb_update();
-  if (FirstTime)
-  {
-    Welcome();
-    FirstTime=0;
-  }
-  map4();
-  spr_show();
-  
-  while(!(JOY_STRT & joytrg(0))) {
-    satb_update();
-    
-	manage_move();
-	
-      if (spriteY<1)
-	{
-	 spriteY=205;
-	 spr_y(spriteY);
-	 music1Init();
-	 return 3;
-	}
-      
-      if ((spriteY>96)&&(spriteY<101)&&(spriteX>55)&&(spriteX<60))
-         {
-	   spriteX=128;
-           spriteY=160;
-           spr_y(spriteY);
-           spr_x(spriteX);
-           return 20000;
-         }
-
-    manage_pattern();
-      vsync();
-    }
-  return -1;
-}*/
-
-/************************************/
-/*housemove1()
-{
-
-
-  housemap1();
-
-  SPRPATTERN=FR_Face;
-  meter=0;
-  pattern=0;
-  positive_pattern=1;
-
-  if (FirstTime)
-    {
-      spr_hide();
-      satb_update();
-      FirstTime=0;
-      HouseText1();
-      housemap1();
-      spr_show();
-      satb_update();
-    }
-
-  while(!(JOY_STRT & joytrg(0))) {
-    satb_update();
-
-    manage_move();
-
-     if (spriteY>178)
-        {
-	  spriteX=56;
-	  spriteY=110;
-          spr_y(spriteY);
-          spr_x(spriteX);
-          return 4;
-	}
-
-    manage_pattern();
-      vsync();
-    }
-  return -1; 
-}*/

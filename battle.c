@@ -785,6 +785,11 @@ if ((HPp[0]>0) || (HPp[1]>0))
      return continu;
      }
 }
+
+#incchr(battle_bg_gfx,BATTLE_BG_PCX,32,22);
+#incpal(battle_bg_pal,BATTLE_BG_PCX,0,1);
+#incbat(battle_bg_bat,BATTLE_BG_PCX,0x1000,32,22);
+
 /*********************************************/
 /*         Battle Background Display         */
 /*********************************************/
@@ -793,8 +798,8 @@ battlescreen()
 char i,j;
 
 cls();
-border(0,0,32,3);
-i=0;
+load_background(battle_bg_gfx,battle_bg_pal,battle_bg_bat,32,22);
+/*i=0;
 while(i<32)
  {
   j=3;
@@ -804,8 +809,8 @@ while(i<32)
     j++;
    }
   i++;
- }
-
+ }*/
+border(0,0,32,3);
 }
 /************************************/
 /*            Select Turn           */
