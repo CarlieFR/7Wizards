@@ -22,6 +22,7 @@
 #define FIRE_MAGICPAL 4
 #define ICE_MAGICPAL 5
 #define BARPAL 8
+#define TILE_PAL 12
 #define DEX 40
 #define ATK 50
 #define DEF 50
@@ -29,8 +30,8 @@
 #define MAGICSPR 30
 #define FIREMAGICPTR 0x7000
 #define ICEMAGICPTR 0x7100
-#define ACTIONBARPTR 0x4000
-#define PLAYER1PTR 0x5000
+#define ACTIONBARPTR 0x6800
+#define PLAYER1PTR 0x5200
 #define PLAYER2PTR 0x6500
 #define NUMBERPTR 0x5500
 #define BARBASESPR 20
@@ -83,10 +84,111 @@
 /**
  * Pattern à afficher en fonction de la direction
  */
-#define FR_Face 0x5000
-#define BK_Face 0x50C0
-#define RGT_Face 0x5180
-#define LFT_Face 0x5240
+#define FR_Face 0x5200
+#define BK_Face 0x52C0
+#define RGT_Face 0x5380
+#define LFT_Face 0x5440
+
+/**
+ * Définition des id de tile
+ */
+const char tiles_pal_ref[250];
+#define Ram_tiles 0X1200
+
+#define Hill 0X12b6
+#define Tile_Hill 107
+
+#define Tile_WaterSky 108
+
+#define Tile_PlainPuddle 85
+
+#define Plain 0X122a
+#define Tile_Plain 112
+
+#define Forest 0X12e4
+#define Tile_Forest 114
+
+#define Fence 0X12e6
+#define Tile_Fence 115
+
+#define Pave 0X1220
+#define Tile_Pave 64
+
+#define HouseDoor11 0x1264
+#define Tile_HouseDoorOut 82
+#define Tile_HouseDoorIn 74
+
+#define HouseWindow 0x11e8
+#define Tile_HouseWindowDL 81
+#define Tile_HouseWindowDR 121
+#define Tile_HouseWindowM 120
+#define Tile_HouseWindowD 122
+
+#define HouseBlank11 0x11a4
+#define Tile_HouseBlankM 34
+#define Tile_HouseBlankD 50
+#define Tile_HouseBlankDR 83
+
+#define HouseRoofL11 0x1222
+#define Tile_HouseRoofL 65
+
+#define HouseRoofM11 0x1224
+#define Tile_HouseRoofM 66
+
+#define HouseRoofR11 0x1226
+#define Tile_HouseRoofR 67
+
+#define HouseIn 0x12ec
+#define Tile_HouseIn 118
+
+#define HouseInWallUL 0x116e
+#define Tile_HouseInWallUL 23
+
+#define HouseInWallU 0x1170
+#define Tile_HouseInWallU 24
+
+#define HouseInWallUR 0x1178
+#define Tile_HouseInWallUR 28
+
+#define HouseInWallL 0x11ae
+#define Tile_HouseInWallL 39
+
+#define HouseInWallR 0x11b8
+#define Tile_HouseInWallR 44
+
+#define HouseInWallDL 0x122e
+#define Tile_HouseInWallDL 71
+
+#define HouseInWallD 0x1230
+#define Tile_HouseInWallD 72
+
+#define HouseInWallDR 0x1238
+#define Tile_HouseInWallDR 76
+
+#define GrassPave11 0x113a
+#define Tile_GrassPaveUL 13
+
+#define GrassPave3111 0x113e
+#define Tile_GrassPaveUR 15
+
+#define GrassPave1411 0x11fa
+#define Tile_GrassPaveL 61
+#define GrassPave1421 0x11fb
+#define GrassPave1412 0x121a
+#define GrassPave1422 0x121b
+#define GrassPave3411 0x11fe
+#define Tile_GrassPaveR 63
+#define GrassPave3421 0x11ff
+#define GrassPave3412 0x121e
+#define GrassPave3422 0x121f
+
+#define FenceUL 0x112c
+#define Tile_FenceUL 6
+#define Tile_FenceL 22
+#define Tile_FenceDL 38
+#define Tile_FenceUR 5
+#define Tile_FenceR 21
+#define Tile_FenceDR 37
 
 const char* magicname[10] =
 {"Fire",

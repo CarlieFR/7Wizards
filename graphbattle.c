@@ -1,8 +1,8 @@
 #incchr(screengfx,SCREEN,3,3);
 #incpal(screenpal,SCREEN,0,1);
 
-#incchr(tilesgfx,TILES,32,32);
-#incpal(tilespal,TILES,0,1);
+#inctile(tilesgfx,TILES);
+#incpal(tilespal,TILES);
 
 #incspr(sprgfx,SPRITE,2,2);
 #incpal(spritepal,SPRITE,0,1);

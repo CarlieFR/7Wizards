@@ -1,10 +1,9 @@
-#define Ram_tiles 0X1200
-
 /************************************************/
 /*               Game Program                   */
 /************************************************/
 game()
 {
+char i;
 
   if(gameState==0) {
     intro();
@@ -22,8 +21,9 @@ game()
     spr_x(spriteX);
     spr_y(spriteY);
     gameState=1;
-    load_sprites(Ram_tiles,tilesgfx,16);
-    set_bgpal(1,tilespal);
+    
+    /*load_sprites(Ram_tiles,tilesgfx,16);*/
+    /*set_bgpal(1,tilespal);*/
      
       
     /*spr_show();
@@ -32,6 +32,13 @@ game()
     /*map1();*/
     oldpos=1;
   }
+  
+  load_palette(TILE_PAL, tilespal, 1);
+  for(i=0; i<250; i++) {
+    tiles_pal_ref[i] = TILE_PAL <<4;
+  }
+  set_tile_data(tilesgfx, 250, tiles_pal_ref);
+  load_tile(Ram_tiles);
 
 while (1)
 {

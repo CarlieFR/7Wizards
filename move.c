@@ -264,7 +264,7 @@ manage_move() {
 	}
   
   if (direction != 0 && nb_monsters > 0) {
-    if ((rand() % 300) < (monster / 10)) {
+    if ((rand() % 400) < (monster / 20)) {
       spr_hide();
       
       monsterID=1;

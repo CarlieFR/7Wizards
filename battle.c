@@ -9,6 +9,9 @@
 #include "cadre.c"
 #include "itemeffect.c"
 
+/********************************/
+#include "graphbattle.c"
+
 /****************************************/
 /*          Battle System               */
 /****************************************/
@@ -34,6 +37,13 @@ load_sprites(NUMBERPTR,numgfx,2);
 set_sprpal(NUMPAL,numpal);
 load_sprites(ACTIONBARPTR,bargfx,4);
 set_sprpal(BARPAL,barpal);
+
+load_palette(TILE_PAL, tilespal, 1);
+  for(i=0; i<250; i++) {
+    tiles_pal_ref[i] = TILE_PAL <<4;
+  }
+  set_tile_data(tilesgfx, 250, tiles_pal_ref);
+  load_tile(Ram_tiles);
 
 silence();
 music4Init();
@@ -786,19 +796,45 @@ if ((HPp[0]>0) || (HPp[1]>0))
      }
 }
 
-#incchr(battle_bg_gfx,BATTLE_BG_PCX,32,22);
-#incpal(battle_bg_pal,BATTLE_BG_PCX,0,1);
-#incbat(battle_bg_bat,BATTLE_BG_PCX,0x1000,32,22);
-
 /*********************************************/
 /*         Battle Background Display         */
 /*********************************************/
+const char battle_bg[] = {
+  Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+     Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+  Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+     Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain};
+     
 battlescreen()
 {
 char i,j;
 
 cls();
-load_background(battle_bg_gfx,battle_bg_pal,battle_bg_bat,32,22);
+
+set_map_data(battle_bg, 16,12);
+ load_map(0,0, 0,0, 16,12);
+ 
+ blank(1,1,30,1);
 /*i=0;
 while(i<32)
  {
@@ -1210,5 +1246,4 @@ for(i=0;i<4;i++)
 satb_update();
 
 }
-/********************************/
-#include "graphbattle.c"
+
