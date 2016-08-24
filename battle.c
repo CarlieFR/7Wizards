@@ -74,7 +74,7 @@ for(i=0;i<4;i++)
   if (HPp[i])
   {
    BattleX[i]=200;
-   BattleY[i]=(i+1)*32;
+   BattleY[i]=16+(i+1)*32;
    spr_set(50+i);
    spr_pri(1);
    if (i==0)
@@ -804,11 +804,11 @@ const char battle_bg[] = {
      Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
   Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
      Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+  Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
+     Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky, Tile_WaterSky,
   Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-     Tile_Plain, Tile_Plain, Tile_Plain, Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+     Tile_Plain, Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
+  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_PlainTrunk, Tile_Plain, Tile_Plain, Tile_Plain,
      Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
   Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
      Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
@@ -821,20 +821,18 @@ const char battle_bg[] = {
   Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
      Tile_PlainPuddle, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
   Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-     Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
-  Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain,
      Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain, Tile_Plain};
      
 battlescreen()
 {
-char i,j;
+/*char i,j;*/
 
-cls();
+  cls();
 
-set_map_data(battle_bg, 16,12);
- load_map(0,0, 0,0, 16,12);
+  set_map_data(battle_bg, 16,11);
+  load_map(0,0, 0,0, 16,11);
  
- blank(1,1,30,1);
+  blank(1,1,30,1);
 /*i=0;
 while(i<32)
  {

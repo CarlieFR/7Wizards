@@ -28,6 +28,7 @@
 #define DEF 50
 #define COUNTMAX 6
 #define MAGICSPR 30
+#define Ram_tiles 0X1200
 #define FIREMAGICPTR 0x7000
 #define ICEMAGICPTR 0x7100
 #define ACTIONBARPTR 0x6800
@@ -93,7 +94,6 @@
  * Définition des id de tile
  */
 const char tiles_pal_ref[250];
-#define Ram_tiles 0X1200
 
 #define Hill 0X12b6
 #define Tile_Hill 107
@@ -101,6 +101,7 @@ const char tiles_pal_ref[250];
 #define Tile_WaterSky 108
 
 #define Tile_PlainPuddle 85
+#define Tile_PlainTrunk 101
 
 #define Plain 0X122a
 #define Tile_Plain 112
@@ -116,7 +117,6 @@ const char tiles_pal_ref[250];
 
 #define HouseDoor11 0x1264
 #define Tile_HouseDoorOut 82
-#define Tile_HouseDoorIn 74
 
 #define HouseWindow 0x11e8
 #define Tile_HouseWindowDL 81
@@ -128,6 +128,8 @@ const char tiles_pal_ref[250];
 #define Tile_HouseBlankM 34
 #define Tile_HouseBlankD 50
 #define Tile_HouseBlankDR 83
+#define Tile_HouseBlankL 123
+#define Tile_HouseBlankR 124
 
 #define HouseRoofL11 0x1222
 #define Tile_HouseRoofL 65
@@ -139,48 +141,60 @@ const char tiles_pal_ref[250];
 #define Tile_HouseRoofR 67
 
 #define HouseIn 0x12ec
-#define Tile_HouseIn 118
+
 
 #define HouseInWallUL 0x116e
-#define Tile_HouseInWallUL 23
-
 #define HouseInWallU 0x1170
-#define Tile_HouseInWallU 24
-
 #define HouseInWallUR 0x1178
-#define Tile_HouseInWallUR 28
-
 #define HouseInWallL 0x11ae
-#define Tile_HouseInWallL 39
-
 #define HouseInWallR 0x11b8
-#define Tile_HouseInWallR 44
-
 #define HouseInWallDL 0x122e
-#define Tile_HouseInWallDL 71
-
 #define HouseInWallD 0x1230
-#define Tile_HouseInWallD 72
-
 #define HouseInWallDR 0x1238
+/**
+ * Intérieur de la maison
+ */
+#define Tile_HouseIn 118
+#define Tile_HouseInWallUL 23
+#define Tile_HouseInWallU 24
+#define Tile_HouseInWallUR 28
+#define Tile_HouseInWallL 39
+#define Tile_HouseInWallR 44
+#define Tile_HouseInWallDL 71
+#define Tile_HouseInWallD 72
 #define Tile_HouseInWallDR 76
 
+#define Tile_HouseInWall 40
+
+#define Tile_HouseDoorIn 74
+#define Tile_HouseInWindowFront 60
+#define Tile_HouseInWindowBack 42
+
+#define Tile_HouseInClock 91
+#define Tile_HouseInWallFloor 92
+#define Tile_HouseInBed 56
+
 #define GrassPave11 0x113a
-#define Tile_GrassPaveUL 13
-
 #define GrassPave3111 0x113e
-#define Tile_GrassPaveUR 15
-
 #define GrassPave1411 0x11fa
-#define Tile_GrassPaveL 61
-#define GrassPave1421 0x11fb
-#define GrassPave1412 0x121a
-#define GrassPave1422 0x121b
 #define GrassPave3411 0x11fe
+
+/**
+ * Chemin pavé avec herbe
+ */
+#define Tile_GrassPaveUL 13
+#define Tile_GrassPaveU 14
+#define Tile_GrassPaveUR 15
+#define Tile_GrassPaveL 61
 #define Tile_GrassPaveR 63
-#define GrassPave3421 0x11ff
-#define GrassPave3412 0x121e
-#define GrassPave3422 0x121f
+#define Tile_GrassPaveDL 30
+#define Tile_GrassPaveD 46
+#define Tile_GrassPaveDR 62
+#define Tile_GrassPaveLUL 29
+#define Tile_GrassPaveRUR 31
+#define Tile_GrassPaveLDL 45
+#define Tile_GrassPaveRDR 47
+
 
 #define FenceUL 0x112c
 #define Tile_FenceUL 6
