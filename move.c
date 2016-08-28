@@ -268,6 +268,7 @@ manage_move() {
       spr_hide();
       
       monsterID=1;
+      battle_bg=map_battle_bg;
       /*monster=0;*/
       
       /*battle();*/
@@ -441,7 +442,7 @@ int mapId;
       map4();
       break;
     case 20000:
-      silence();
+      /*silence();*/
       housemap1();
       break;
   }

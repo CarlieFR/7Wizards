@@ -1,9 +1,9 @@
 /*#define Ram_tiles 0X1200*/
 
 
-#define line_shift 0x0020
+/*#define line_shift 0x0020*/
 
-print_map(map)
+/*print_map(map)
 int* map;
 {
 	char line, row;
@@ -16,7 +16,7 @@ int* map;
 			put_raw(map[16*line+row]+1+line_shift, 2*row+1, 2*line+1);
 		}
 	}
-}
+}*/
 
 /*const int map_in_1[224] = 
  {Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,  Hill,
@@ -89,29 +89,23 @@ int *no_monster_in_map;
 map1()
 {
 
-/*vsync();*/
 cls();
 
-/*load_sprites(Ram_tiles,tilesgfx,16);
-set_bgpal(1,tilespal);*/
-
- /*print_map(map_in_1);*/
- set_map_data(tiles_map1, 16,14);
- load_map(0,0, 0,0, 16,14);
+set_map_data(tiles_map1, 16,14);
+load_map(0,0, 0,0, 16,14);
  
- move_in_map = move_in_1;
+move_in_map = move_in_1;
  
- event_in_map = event_in_1;
- nb_events = 2;
+event_in_map = event_in_1;
+nb_events = 2;
  
- monsters_in_map = no_monster_in_map;
- nb_monsters = 0;
+monsters_in_map = no_monster_in_map;
+nb_monsters = 0;
+map_battle_bg = PLAIN_BG;
  
- music1Init();
- /*array_copy(move_in_1, move_in_map, 14);*/
- /*for (i=0; i<14; i++) {
-	move_in_map[i] = move_in_1[i];
- }*/
+ if (currentMusic != 1) {
+   music1Init();
+ }
  
 }
 /***********************************************/
@@ -198,10 +192,12 @@ event_in_map = event_in_2;
  
  monsters_in_map = monsters_in_map2;
  nb_monsters = 1;
+ 
+ map_battle_bg = PLAIN_BG;
 
-/*load_sprites(Ram_tiles,tilesgfx,1);
-set_bgpal(1,tilespal);
-*/
+ if (currentMusic != 1) {
+   music1Init();
+ }
 
 
 }
@@ -291,7 +287,12 @@ event_in_map = event_in_3;
  
  monsters_in_map = no_monster_in_map;
  nb_monsters = 0;
+ 
+ map_battle_bg = PLAIN_BG;
 
+ if (currentMusic != 1) {
+   music1Init();
+ }
 }
 
 /************************************/
@@ -363,7 +364,12 @@ event_in_map = event_in_4;
  
  monsters_in_map = no_monster_in_map;
  nb_monsters = 0;
+ 
+ map_battle_bg = PAVE_CITY_BG;
 
+ if (currentMusic != 1) {
+   music1Init();
+ }
 }
 
 /**********************************/
@@ -436,5 +442,10 @@ event_in_map = event_in_house1;
  
  monsters_in_map = no_monster_in_map;
  nb_monsters = 0;
+ 
+ map_battle_bg = PAVE_CITY_BG;
 
+ if (currentMusic != 1) {
+   music1Init();
+ }
 }

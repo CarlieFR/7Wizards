@@ -204,6 +204,18 @@ const char tiles_pal_ref[250];
 #define Tile_FenceR 21
 #define Tile_FenceDR 37
 
+/**
+ * Index des background de combat
+ */
+
+#define PLAIN_BG 0
+#define FOREST_BG 1
+#define PAVE_CITY_BG 2
+
+/**
+ * Autres constantes
+ */
+
 const char* magicname[10] =
 {"Fire",
  "Ice",

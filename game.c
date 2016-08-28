@@ -42,13 +42,13 @@ char i;
 
 while (1)
 {
+  silence();
+  
  switch (pos)
  {
  case -1:
     spr_hide();
-    silence();
     menu();
-    music1Init();
     spr_show();
     pos=oldpos;
     break;

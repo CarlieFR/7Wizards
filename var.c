@@ -43,5 +43,18 @@ char positive_pattern;
  * Variables sur les monstres possibles dans une zone
  */
 
- int *monsters_in_map;
- char nb_monsters;
+int *monsters_in_map;
+char nb_monsters;
+/**
+ * Index du background à afficher en combat.
+ * Utilisation d'une variable séparée pour indiquer le background pour la map.
+ * Cela permet de séparer le background d'une map de celui d'un event spécifique.
+ */
+char battle_bg;
+char map_battle_bg;
+
+/**
+ * Indicateur de la musique actuellement jouée.
+ * 0 indique aucune musique.
+ */
+char currentMusic;
