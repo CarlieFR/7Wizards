@@ -36,6 +36,7 @@ initchannelnoise(2);
 initchannelnoise(3);
 initchannelnoise(4);
 initchannelnoise(5);
-playmusic();
 
+currentMusic = 0;
+playmusic();
 }

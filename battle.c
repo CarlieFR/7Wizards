@@ -9,6 +9,9 @@
 #include "cadre.c"
 #include "itemeffect.c"
 
+/********************************/
+#include "graphbattle.c"
+
 /****************************************/
 /*          Battle System               */
 /****************************************/
@@ -26,14 +29,7 @@ AtkN = monsterAtk[monsterID];
 DefN = monsterDef[monsterID];
 DexN = monsterDex[monsterID];
 
-load_sprites(FIREMAGICPTR,fire_magicgfx,2);
-load_sprites(ICEMAGICPTR,ice_magicgfx,2);
-set_sprpal(ICE_MAGICPAL,ice_magicpal);
-set_sprpal(FIRE_MAGICPAL,fire_magicpal);
-load_sprites(NUMBERPTR,numgfx,2);
-set_sprpal(NUMPAL,numpal);
-load_sprites(ACTIONBARPTR,bargfx,4);
-set_sprpal(BARPAL,barpal);
+init_graph();
 
 silence();
 music4Init();
@@ -64,7 +60,7 @@ for(i=0;i<4;i++)
   if (HPp[i])
   {
    BattleX[i]=200;
-   BattleY[i]=(i+1)*32;
+   BattleY[i]=16+(i+1)*32;
    spr_set(50+i);
    spr_pri(1);
    if (i==0)
@@ -277,33 +273,7 @@ switch(turn)
 
 
 }
-/*********************************************/
-/*           Fight low frame                 */
-/*********************************************/
-fightframe(life_enemy,turn)
-int life_enemy,turn;
-{
-char i;
 
- blank(1,23,30,4);
- border(10,22,22,6);
- put_string(NamP1,12,23);
- put_string(NamP2,12,24);
- put_string(NamP3,12,25);
- put_string(NamP4,12,26);
- put_string("Enemy",12,21);
- for(i=0;i<4;i++)
- {
-   put_number(HPp[i],5,25,23+i);
-   /*spr_set(BARBASESPR+2*i);
-   spr_show();
-   spr_set(BARBASESPR+2*i+1);
-   spr_show();*/
- }
- put_number(life_enemy,5,25,21);
- blank(11,23,1,4);
- if (turn<4) put_char('>',11,23+turn);
-}
 /*********************************************/
 /*            Fight Sequence                 */
 /*********************************************/
@@ -785,28 +755,7 @@ if ((HPp[0]>0) || (HPp[1]>0))
      return continu;
      }
 }
-/*********************************************/
-/*         Battle Background Display         */
-/*********************************************/
-battlescreen()
-{
-char i,j;
 
-cls();
-border(0,0,32,3);
-i=0;
-while(i<32)
- {
-  j=3;
-  while(j<22)
-   {
-    put_raw(0X104,i,j);
-    j++;
-   }
-  i++;
- }
-
-}
 /************************************/
 /*            Select Turn           */
 /************************************/
@@ -1205,5 +1154,4 @@ for(i=0;i<4;i++)
 satb_update();
 
 }
-/********************************/
-#include "graphbattle.c"
+

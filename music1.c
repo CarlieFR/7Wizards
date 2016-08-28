@@ -230,4 +230,6 @@ initchannelsine(2);
 initchannelsquare(3);
 initchannelnoise(4);
 initchannelnoise(5);
+
+currentMusic = 1;
 }
