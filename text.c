@@ -1,22 +1,31 @@
+#include "strutils.c"
+char text_buffer[512];
+
 intro()
 {
 
 cls();
+text_buffer[0] = NULL;
 border(0,0,32,28);
-put_string("In a time where, after endless",1,1);
+/*put_string("In a time where, after endless",1,1);
 put_string("magic battles, only priests",1,3);
 put_string("are allowed to cast healing",1,5);
 put_string("magic, wizards are feared,",1,7);
-put_string("if not chased...",1,9);
-put_string("Most of the remaining magic",1,13);
+put_string("if not chased...",1,9);*/
+strcat(text_buffer,
+  "In a time where, after endless magic battles, only priests are allowed to cast healing magic, wizards are feared, if not chased...\n");
+strcat(text_buffer, "\nMost of the remaining magic caster have turned into sage master for everyone's sake.\n");
+strcat(text_buffer, "\nHowever, a few of them decided to use their unique abilities for greed and power.");
+print_text(text_buffer, 1, 1, 13, NULL);
+/*put_string("Most of the remaining magic",1,13);
 put_string("caster have turned into sage",1,15);
 put_string("master for everyone's sake...",1,17);
 put_string("However, a few of them decided",1,21);
 put_string("to use their unique abilities",1,23);
-put_string("for greed and power...",1,25);
-vsync(60);
-put_char('>',30,26);
-while(!(joy(0)));
+put_string("for greed and power...",1,25);*/
+/*vsync(60);
+put_char('>',30,26);*/
+/*while(!(joy(0)));*/
 
 }
 
