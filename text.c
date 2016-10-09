@@ -3,7 +3,7 @@ char text_buffer[512];
 
 intro()
 {
-
+char* options[2];
 cls();
 text_buffer[0] = NULL;
 border(0,0,32,28);
@@ -15,8 +15,10 @@ put_string("if not chased...",1,9);*/
 strcat(text_buffer,
   "In a time where, after endless magic battles, only priests are allowed to cast healing magic, wizards are feared, if not chased...\n");
 strcat(text_buffer, "\nMost of the remaining magic caster have turned into sage master for everyone's sake.\n");
-strcat(text_buffer, "\nHowever, a few of them decided to use their unique abilities for greed and power.");
-print_text(text_buffer, 1, 1, 13, NULL);
+strcat(text_buffer, "\nHowever, a few of them decided to use their unique abilities for greed and power.\n");
+strcat(text_buffer, "\nHere are {0} and {1}, two young friends travelling back home after hunting for some food.");
+
+print_text2(text_buffer, 1, 1, 13, NamP1, NamP2);
 /*put_string("Most of the remaining magic",1,13);
 put_string("caster have turned into sage",1,15);
 put_string("master for everyone's sake...",1,17);
