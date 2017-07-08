@@ -29,6 +29,8 @@ if(gameState==0)
   cls();
   set_font_color(1,2);
   load_default_font();
+  
+  first_time_map4 = 1;
 
  while(1)
  {
@@ -144,25 +146,36 @@ enter()
  j=0;
  k=0;
  Entry[6]=0;
+ put_char('^',12+k,13);
+ 
  while (!(joytrg(0) & JOY_STRT))
   {
-   if ((joytrg(0) & JOY_RGHT) && (i<26)) i++;
-    else
-      if ((joytrg(0) & JOY_LEFT) && (i>0)) i--;
+   if ((joytrg(0) & JOY_RGHT) && (i<25)) {
+     i++;
+   } else if ((joytrg(0) & JOY_LEFT) && (i>0)) {
+     i--;
+   }
+    
    if ((joytrg(0) & JOY_B) && (k>0))
       {Entry[k]=0;
       put_char(' ',12+k,13);
       k--;
       put_char('^',12+k,13);}
-   if ((joytrg(0) & JOY_A) && (k==5)) Entry[k]=i+'A'+j*('a'-'A');
-   if ((joytrg(0) & JOY_A) && (k<5))
-      {Entry[k]=i+'A'+j*('a'-'A');
+   
+   if (joytrg(0) & JOY_A) {
+     Entry[k]=i+'A'+j*('a'-'A');
+     if (k<5) {
        put_char(' ',12+k,13);
        k++;
-       put_char('^',12+k,13);}
-   if ((joytrg(0) & JOY_UP) && (j>0)) j--;
-    else
-      if ((joytrg(0) & JOY_DOWN) && (j<1)) j++;
+       put_char('^',12+k,13);
+     }
+   }
+   if ((joytrg(0) & JOY_UP) && (j>0)) {
+      j--;
+   } else if ((joytrg(0) & JOY_DOWN) && (j<1)) {
+     j++;
+   }
+   
    put_string("      ",12,11);
    put_string(Entry,12,11);
    blank(3,22,26,1);

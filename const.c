@@ -78,6 +78,7 @@
 
 #define TELEPORT_EVT 1
 #define BATTLE_EVT 2
+#define MAP_SPECIAL_EVT 3
 
 #define DIR_LEFT 1
 #define DIR_RIGHT 2

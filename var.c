@@ -58,3 +58,8 @@ char map_battle_bg;
  * 0 indique aucune musique.
  */
 char currentMusic;
+
+/**
+ * Special event variables
+ */
+char first_time_map4;

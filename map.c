@@ -229,7 +229,7 @@ const char tiles_map3[224] =
   T_Hill,  T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain,
       T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Hill,
   T_Hill,  T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain,
-      T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Hill,
+      T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Forest, T_Hill,
   T_Hill,  T_Hill,  T_Hill,  T_Hill,  T_Hill,  T_Hill,  T_FenceUR,  T_GrassPaveUL,
      T_GrassPaveUR,  T_FenceUL,  T_Hill,  T_Hill,  T_Hill,  T_Hill,  T_Hill,  T_Hill};
   
@@ -249,7 +249,7 @@ const int move_in_3[14] =
   MOVE_COL01 + MOVE_COL16,
   0xf + MOVE_COL05 + MOVE_COL06 + MOVE_COL07 + MOVE_COL10 + MOVE_COL11 + MOVE_COL12 + 0xf000};
 
-const int event_in_3[64]={
+const int event_in_3[72]={
 	13+7*256, TELEPORT_EVT, 4, 0+7*256,
   13+8*256, TELEPORT_EVT, 4, 0+8*256,
 	0+1*256, TELEPORT_EVT, 2, 13+1*256,
@@ -265,7 +265,9 @@ const int event_in_3[64]={
   0+11*256, TELEPORT_EVT, 2, 13+11*256,
   0+12*256, TELEPORT_EVT, 2, 13+12*256,
   0+13*256, TELEPORT_EVT, 2, 13+13*256,
-  0+14*256, TELEPORT_EVT, 2, 13+14*256};
+  0+14*256, TELEPORT_EVT, 2, 13+14*256,
+  12+14*256, MAP_SPECIAL_EVT, 0, 0,
+  12+1*256, BATTLE_EVT, 1, PLAIN_BG};
   
 map3()
 {
@@ -283,7 +285,7 @@ move_in_map = move_in_3;
 /*array_copy(move_in_3, move_in_map, 14);*/
 
 event_in_map = event_in_3;
- nb_events = 16;
+ nb_events = 18;
  
  monsters_in_map = no_monster_in_map;
  nb_monsters = 0;
@@ -293,6 +295,11 @@ event_in_map = event_in_3;
  if (currentMusic != 1) {
    music1Init();
  }
+}
+
+event_map3()
+{
+  help();
 }
 
 /************************************/
@@ -343,10 +350,12 @@ const int move_in_4[14] =
   MOVE_COL01 + MOVE_COL16,
   MOVE_LINE};
   
-const int event_in_4[12]={
+const int event_in_4[20]={
 	0+7*256, TELEPORT_EVT, 3, 13+7*256,
   0+8*256, TELEPORT_EVT, 3, 13+8*256,
-  5+4*256, TELEPORT_EVT, 20000, 11+8*256};
+  5+4*256, TELEPORT_EVT, 20000, 11+8*256,
+  1+7*256, MAP_SPECIAL_EVT, 0, 0,
+  1+8*256, MAP_SPECIAL_EVT, 0, 0};
 
 map4()
 {
@@ -360,7 +369,7 @@ cls();
 move_in_map = move_in_4;
 
 event_in_map = event_in_4;
- nb_events = 3;
+ nb_events = 5;
  
  monsters_in_map = no_monster_in_map;
  nb_monsters = 0;
@@ -370,6 +379,16 @@ event_in_map = event_in_4;
  if (currentMusic != 1) {
    music1Init();
  }
+}
+
+event_map4()
+{
+  if (first_time_map4) {
+    first_time_map4 = 0;
+    vsync();
+    welcome_town1();
+    
+  }
 }
 
 /**********************************/

@@ -18,6 +18,7 @@ strcat(text_buffer, "\nMost of the remaining magic caster have turned into sage 
 strcat(text_buffer, "\nHowever, a few of them decided to use their unique abilities for greed and power.\n");
 strcat(text_buffer, "\nHere are {0} and {1}, two young friends travelling back home after hunting for some food.");
 
+
 print_text2(text_buffer, 1, 1, 13, NamP1, NamP2);
 /*put_string("Most of the remaining magic",1,13);
 put_string("caster have turned into sage",1,15);
@@ -35,36 +36,51 @@ help()
 {
   border(0,0,32,10);
   blank(1,1,30,8);
-  put_string("Here should start the quest",1,1);
+  text_buffer[0] = NULL;
+  strcat(text_buffer,
+    "Here should start the quest of Bob the blob... If it wasn't a test rom for a next rpg game!\n");
+  strcat(text_buffer, "Have some fun until the next release!\n");
+  /*put_string("Here should start the quest",1,1);
   put_string("of Bob the blob...If it",1,2);
   put_string("wasn't a test rom for a next",1,3);
   put_string("rpg game! Have some fun until",1,4);
   put_string("the next release!",1,5);
   put_string("PUSH BUTTON",20,8);
   while(!(joytrg(0)));
-  blank(1,1,30,8);
-  put_string("If you want to help me",1,1);
+  blank(1,1,30,8);*/
+  strcat(text_buffer, "If you want to help me, create your branch on git and submet your merge request");
+  print_text(text_buffer, 1, 1, 4);
+  /*put_string("If you want to help me",1,1);
   put_string("with the gfx or the music",1,2);
   put_string("just sent me a mail!",1,3);
   vsync(30);
-  while(!(joytrg(0) & JOY_STRT));
+  while(!(joytrg(0) & JOY_STRT));*/
 }
 
-Welcome()
+welcome_town1()
 {
   border(0,0,32,10);
   blank(1,1,30,8);
-  put_string("As you approach the village",1,1);
+  text_buffer[0] = NULL;
+  strcat(text_buffer, "As you approach the village you hear a familliar voice.");
+  print_text(text_buffer, 1, 1, 4);
+  
+  /*put_string("As you approach the village",1,1);
   put_string("you hear a familliar voice.",1,2);
-  vsync(20);
-  put_string("You can see the elder",1,4);
+  vsync(20);*/
+  text_buffer[0] = NULL;
+  strcat(text_buffer, "You can see the elder coming toward you :\n");
+  strcat(text_buffer, "Welcome back {0} !\nHow was your hunt?");
+  print_text2(text_buffer, 1, 1, 4, NamP1);
+  
+  /*put_string("You can see the elder",1,4);
   put_string("coming toward you :",1,5);
   put_string("Welcome back",1,6);
   put_string(NamP1,14,6);
   put_string("How was your hunt?",1,7);
   vsync(30);
   put_char('>',30,8);
-  while(!(joytrg(0)));
+  while(!(joytrg(0)));*/
 }
 
 HouseText1()
