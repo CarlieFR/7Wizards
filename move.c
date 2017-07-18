@@ -415,6 +415,10 @@ int type, arg1, arg2;
       teleport(arg1);
       break;
     case BATTLE_EVT :
+      do_battle_event(arg1, arg2);
+      break;
+    case MAP_SPECIAL_EVT :
+      do_special_event(arg1, arg2);
       break;
     default :
       break;
@@ -446,6 +450,45 @@ int mapId;
       housemap1();
       break;
   }
+}
+
+do_special_event(arg1, arg2)
+int arg1, arg2;
+{
+  switch(oldpos) {
+    case 1:
+      /* event_map1(); */
+      break;
+    case 2:
+      /* event_map2(); */
+      break;
+    case 3:
+      event_map3();
+      break;
+    case 4:
+      event_map4();
+      break;
+    case 20000:
+      /* event_housemap1(); */
+      break;
+  }
+}
+
+/**
+ * monstreID : id of the monster to fight
+ * map_bg_id : id of the battle background map
+ */
+do_battle_event(monstreID, map_bg_id)
+int monstreID, map_bg_id;
+{
+  spr_hide();
+      
+      monsterID=monstreID;
+      battle_bg=map_bg_id;
+      /*monster=0;*/
+      
+      /*battle();*/
+      cd_execoverlay(OVL_BATTLE);
 }
 
 

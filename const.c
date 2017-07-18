@@ -2,6 +2,8 @@
 #define OVL_RPG 2
 #define OVL_BATTLE 3
 
+#define NULL 0
+
 #define LIFEMAX 500
 #define MPMAX 30
 #define TITLEPCX "title.pcx"
@@ -76,6 +78,7 @@
 
 #define TELEPORT_EVT 1
 #define BATTLE_EVT 2
+#define MAP_SPECIAL_EVT 3
 
 #define DIR_LEFT 1
 #define DIR_RIGHT 2
@@ -96,49 +99,49 @@
 const char tiles_pal_ref[250];
 
 #define Hill 0X12b6
-#define Tile_Hill 107
+#define T_Hill 107
 
-#define Tile_WaterSky 108
+#define T_WaterSky 108
 
-#define Tile_PlainPuddle 85
-#define Tile_PlainTrunk 101
+#define T_PlainPuddle 85
+#define T_PlainTrunk 101
 
 #define Plain 0X122a
-#define Tile_Plain 112
+#define T_Plain 112
 
 #define Forest 0X12e4
-#define Tile_Forest 114
+#define T_Forest 114
 
 #define Fence 0X12e6
-#define Tile_Fence 115
+#define T_Fence 115
 
 #define Pave 0X1220
-#define Tile_Pave 64
+#define T_Pave 64
 
 #define HouseDoor11 0x1264
-#define Tile_HouseDoorOut 82
+#define T_HouseDoorOut 82
 
 #define HouseWindow 0x11e8
-#define Tile_HouseWindowDL 81
-#define Tile_HouseWindowDR 121
-#define Tile_HouseWindowM 120
-#define Tile_HouseWindowD 122
+#define T_HouseWindowDL 81
+#define T_HouseWindowDR 121
+#define T_HouseWindowM 120
+#define T_HouseWindowD 122
 
 #define HouseBlank11 0x11a4
-#define Tile_HouseBlankM 34
-#define Tile_HouseBlankD 50
-#define Tile_HouseBlankDR 83
-#define Tile_HouseBlankL 123
-#define Tile_HouseBlankR 124
+#define T_HouseBlankM 34
+#define T_HouseBlankD 50
+#define T_HouseBlankDR 83
+#define T_HouseBlankL 123
+#define T_HouseBlankR 124
 
 #define HouseRoofL11 0x1222
-#define Tile_HouseRoofL 65
+#define T_HouseRoofL 65
 
 #define HouseRoofM11 0x1224
-#define Tile_HouseRoofM 66
+#define T_HouseRoofM 66
 
 #define HouseRoofR11 0x1226
-#define Tile_HouseRoofR 67
+#define T_HouseRoofR 67
 
 #define HouseIn 0x12ec
 
@@ -154,25 +157,25 @@ const char tiles_pal_ref[250];
 /**
  * Intérieur de la maison
  */
-#define Tile_HouseIn 118
-#define Tile_HouseInWallUL 23
-#define Tile_HouseInWallU 24
-#define Tile_HouseInWallUR 28
-#define Tile_HouseInWallL 39
-#define Tile_HouseInWallR 44
-#define Tile_HouseInWallDL 71
-#define Tile_HouseInWallD 72
-#define Tile_HouseInWallDR 76
+#define T_HouseIn 118
+#define T_HouseInWallUL 23
+#define T_HouseInWallU 24
+#define T_HouseInWallUR 28
+#define T_HouseInWallL 39
+#define T_HouseInWallR 44
+#define T_HouseInWallDL 71
+#define T_HouseInWallD 72
+#define T_HouseInWallDR 76
 
-#define Tile_HouseInWall 40
+#define T_HouseInWall 40
 
-#define Tile_HouseDoorIn 74
-#define Tile_HouseInWindowFront 60
-#define Tile_HouseInWindowBack 42
+#define T_HouseDoorIn 74
+#define T_HouseInWindowFront 60
+#define T_HouseInWindowBack 42
 
-#define Tile_HouseInClock 91
-#define Tile_HouseInWallFloor 92
-#define Tile_HouseInBed 56
+#define T_HouseInClock 91
+#define T_HouseInWallFloor 92
+#define T_HouseInBed 56
 
 #define GrassPave11 0x113a
 #define GrassPave3111 0x113e
@@ -182,27 +185,27 @@ const char tiles_pal_ref[250];
 /**
  * Chemin pavé avec herbe
  */
-#define Tile_GrassPaveUL 13
-#define Tile_GrassPaveU 14
-#define Tile_GrassPaveUR 15
-#define Tile_GrassPaveL 61
-#define Tile_GrassPaveR 63
-#define Tile_GrassPaveDL 30
-#define Tile_GrassPaveD 46
-#define Tile_GrassPaveDR 62
-#define Tile_GrassPaveLUL 29
-#define Tile_GrassPaveRUR 31
-#define Tile_GrassPaveLDL 45
-#define Tile_GrassPaveRDR 47
+#define T_GrassPaveUL 13
+#define T_GrassPaveU 14
+#define T_GrassPaveUR 15
+#define T_GrassPaveL 61
+#define T_GrassPaveR 63
+#define T_GrassPaveDL 30
+#define T_GrassPaveD 46
+#define T_GrassPaveDR 62
+#define T_GrassPaveLUL 29
+#define T_GrassPaveRUR 31
+#define T_GrassPaveLDL 45
+#define T_GrassPaveRDR 47
 
 
 #define FenceUL 0x112c
-#define Tile_FenceUL 6
-#define Tile_FenceL 22
-#define Tile_FenceDL 38
-#define Tile_FenceUR 5
-#define Tile_FenceR 21
-#define Tile_FenceDR 37
+#define T_FenceUL 6
+#define T_FenceL 22
+#define T_FenceDL 38
+#define T_FenceUR 5
+#define T_FenceR 21
+#define T_FenceDR 37
 
 /**
  * Index des background de combat
@@ -301,3 +304,7 @@ const char* itemdesc[11] =
 	 }
  }
  
+#define continue_indicator "<.>"
+#define end_indicator "<X>"
+#define empty_indicator "   "
+#define TEXT_BUTTON_MASK (JOY_STRT | JOY_A | JOY_B)

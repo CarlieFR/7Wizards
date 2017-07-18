@@ -6,6 +6,7 @@ game()
 char i;
 
   if(gameState==0) {
+    vsync(20);
     intro();
 
     pos=1;
