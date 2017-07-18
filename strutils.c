@@ -195,7 +195,7 @@ char x,y,nb_lines;
           current_line = 0;
           vsync(1);
           wait_counter = 11;
-          while(!(joy(0))) {
+          while(!(joy(0) & TEXT_BUTTON_MASK)) {
             wait_counter++;
             if (wait_counter == 6) {
               put_string(empty_indicator, 27, y-1+(2*nb_lines));
@@ -229,7 +229,7 @@ char x,y,nb_lines;
             current_line = 0;
             vsync(1);
             wait_counter = 11;
-            while(!(joy(0))) {
+            while(!(joy(0) & TEXT_BUTTON_MASK)) {
               wait_counter++;
               if (wait_counter == 6) {
                 put_string(empty_indicator, 27, y-1+(2*nb_lines));
@@ -318,7 +318,7 @@ char x,y,nb_lines;
           current_line = 0;
           vsync(1);
           wait_counter = 11;
-          while(!(joy(0))) {
+          while(!(joy(0) & TEXT_BUTTON_MASK)) {
             wait_counter++;
             if (wait_counter == 6) {
               put_string(empty_indicator, 27, y-1+(2*nb_lines));
@@ -346,7 +346,7 @@ char x,y,nb_lines;
   }
   vsync(5);
   wait_counter = 11;
-  while(!(joy(0))) {
+  while(!(joy(0) & TEXT_BUTTON_MASK)) {
     wait_counter++;
     if (wait_counter == 6) {
       put_string(empty_indicator, 27, y-1+(2*nb_lines));

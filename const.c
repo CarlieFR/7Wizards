@@ -307,3 +307,4 @@ const char* itemdesc[11] =
 #define continue_indicator "<.>"
 #define end_indicator "<X>"
 #define empty_indicator "   "
+#define TEXT_BUTTON_MASK (JOY_STRT | JOY_A | JOY_B)

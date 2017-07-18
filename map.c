@@ -300,6 +300,7 @@ event_in_map = event_in_3;
 event_map3()
 {
   help();
+  map3();
 }
 
 /************************************/
@@ -387,6 +388,7 @@ event_map4()
     first_time_map4 = 0;
     vsync();
     welcome_town1();
+    map4();
     
   }
 }
