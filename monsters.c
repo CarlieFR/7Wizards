@@ -2,27 +2,27 @@ const char *monsterName[] =
 {"Goblin",
  "Blob"
 };
-const int monsterAtk[] =
+const unsigned char monsterAtk[] =
 {50,
  25
 };
-const int monsterDef[] =
+const unsigned char monsterDef[] =
 {50,
  20
 };
-const int monsterDex[] =
+const unsigned char monsterDex[] =
 {40,
  40
 };
-const int monsterLifeMax[] =
+const unsigned int monsterLifeMax[] =
 {500,
  250
 };
-const int monsterExp[] =
+const unsigned int monsterExp[] =
 {50,
  15
 };
-const int monsterRes[] =
+const unsigned int monsterRes[] =
 {0x0000,
  0x0012
 };

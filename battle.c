@@ -1,10 +1,16 @@
-#include "huc.h"
-#include "monsters.c"
+/********************************/
+/*    Header battle system      */
+/********************************/
+
+#include <huc.h>
+#include <st.h>
+
 #include "var.c"
 #include "const.c"
+#include "monsters.c"
 #include "magic.c"
-#include "musicsystem.c"
-#include "music4.c"
+/*#include "musicsystem.c"
+#include "music4.c"*/
 #include "silence.c"
 #include "cadre.c"
 #include "itemeffect.c"
@@ -12,28 +18,35 @@
 /********************************/
 #include "graphbattle.c"
 
+#incasm("TestMelancholia.asm")
+extern struct st_header TestMelancholia[];
+
 /****************************************/
 /*          Battle System               */
 /****************************************/
 main()
 {
-int Life,Exp,enemyres;
-char DexN,DefN,AtkN;
-int oldHP[4],life_enemy,select,wound,res;
+unsigned int Life,Exp,enemyres;
+unsigned char DexN,DefN,AtkN;
+int oldHP[4],life_enemy;
+unsigned int select,wound,res;
 char turn,continu,target,i,playing;
 
-Life = (monsterLifeMax[monsterID]*2)/3 + (rand() % (monsterLifeMax[monsterID]/3));
+Life = (monsterLifeMax[monsterID]*3 + (rand() % monsterLifeMax[monsterID]))/4;
 Exp = monsterExp[monsterID];
 enemyres = monsterRes[monsterID];
 AtkN = monsterAtk[monsterID];
 DefN = monsterDef[monsterID];
 DexN = monsterDex[monsterID];
-
+cls();
 init_graph();
 
-silence();
-music4Init();
-count=0;
+/*silence();*/
+/*music4Init();*/
+st_init();
+st_set_song(bank(TestMelancholia), TestMelancholia);
+/*st_reset();*/
+st_play_song();
 
 set_font_color(1,2);
 load_default_font();
@@ -46,6 +59,8 @@ while(1)
 
   satb_update();
   cls();
+  set_font_color(1,2);
+  load_default_font();
   battlescreen();
   border(10,22,22,6);
 
@@ -97,142 +112,141 @@ for(i=0;i<4;i++)
    /*spr_set(50+turn);*/
    satb_update();
 
-switch(turn)
-  {
-/*    PLAYER 1    */
-  case 0:
+  switch(turn)
+    {
+  /*    PLAYER 1    */
+    case 0:
 
-  BattleP1(&life_enemy,DefN,DexN,enemyres);
-  /*turn=STurn(turn);*/
+    BattleP1(&life_enemy,DefN,DexN,enemyres);
+    /*turn=STurn(turn);*/
 
-  break;
+    break;
 
-/*    PLAYER 2    */
-  case 1:
+  /*    PLAYER 2    */
+    case 1:
 
-  BattleP2(&life_enemy,DefN,DexN,enemyres);
-  /*turn=STurn(turn);*/
+    BattleP2(&life_enemy,DefN,DexN,enemyres);
+    /*turn=STurn(turn);*/
 
-  break;
+    break;
 
-/*    PLAYER 3    */
-/*  case 2:
+  /*    PLAYER 3    */
+  /*  case 2:
 
-  switch(battleselect())
-  {
-   case 1:
-    wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
-    if (wound)
-     {
-      put_string(NamP3,2,1);
-      put_string("hit for      points",9,1);
-      life_enemy-=wound;
-      put_number(wound,4,16,1);
+    switch(battleselect())
+    {
+     case 1:
+      wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
+      if (wound)
+       {
+        put_string(NamP3,2,1);
+        put_string("hit for      points",9,1);
+        life_enemy-=wound;
+        put_number(wound,4,16,1);
+       }
+        else
+         {
+    put_string(NamP3,2,1);
+    put_string("missed",9,1);
+         }
+
+       turn=STurn(turn);
+       break;
+
+     case 2:
+         Magicbattle(turn,life_enemy,enemyres);
+         break;
+     case 3:
+         Special(turn);
+         break;
+     case 4:
+         Battleitem(turn);
+         break;
      }
-      else
+    break;
+
+  /*    PLAYER 4    */
+  /*  case 3:
+
+    switch(battleselect())
+    {
+     case 1:
+      wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
+      if (wound)
        {
-	put_string(NamP3,2,1);
-	put_string("missed",9,1);
+        put_string(NamP4,2,1);
+        put_string("hit for      points",9,1);
+        life_enemy-=wound;
+        put_number(wound,4,16,1);
        }
+        else
+         {
+    put_string(NamP4,2,1);
+    put_string("missed",9,1);
+         }
 
-     turn=STurn(turn);
-     break;
-
-   case 2:
-       Magicbattle(turn,life_enemy,enemyres);
+       turn=STurn(turn);
        break;
-   case 3:
-       Special(turn);
-       break;
-   case 4:
-       Battleitem(turn);
-       break;
-   }
-  break;
 
-/*    PLAYER 4    */
-/*  case 3:
-
-  switch(battleselect())
-  {
-   case 1:
-    wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
-    if (wound)
-     {
-      put_string(NamP4,2,1);
-      put_string("hit for      points",9,1);
-      life_enemy-=wound;
-      put_number(wound,4,16,1);
+     case 2:
+         Magicbattle(turn,life_enemy,enemyres);
+         break;
+     case 3:
+         Special(turn);
+         break;
+     case 4:
+         Battleitem(turn);
+         break;
      }
-      else
-       {
-	put_string(NamP4,2,1);
-	put_string("missed",9,1);
-       }
+    break;
 
-     turn=STurn(turn);
-     break;
-
-   case 2:
-       Magicbattle(turn,life_enemy,enemyres);
-       break;
-   case 3:
-       Special(turn);
-       break;
+  /*      ENEMY 1      */
    case 4:
-       Battleitem(turn);
-       break;
-   }
-  break;
+     spr_set(54);
+     /*spr_pal(SPRITEPAL);*/
+     blank(1,23,8,4);
+     border(0,22,10,6);
+     put_string("PUSH",3,23);
+     put_string("START",3,25);
 
-/*      ENEMY 1      */
- case 4:
-   spr_set(54);
-   /*spr_pal(SPRITEPAL);*/
-   blank(1,23,8,4);
-   border(0,22,10,6);
-   put_string("PUSH",3,23);
-   put_string("START",3,25);
-
-
-   while(!(joytrg(0) & JOY_STRT))
-   {
-     music_update();
-     rand();
-     vsync();
-   }
-
-   blank(1,1,30,1);
-   target=rand()%2;
-   while(HPp[target]<1) target=rand()%2;
-
-    for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
-    for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
-     wound=fight(AtkN,DexN,DefP[target],DexP[target]);
-     if (wound)
-       {
-	put_string("Enemy attacks",5,1);
-	HPp[target]-=wound;
-        damage(wound,200,(target+1)*32);
-	if (HPp[target]<0) HPp[target]=0;
-       }
-       else
-	put_string("He missed",5,1);
-
-   /*turn=STurn(turn);*/
-   break;
-  }
-
-   /*playing=0;
-   for(i=0;i<5;i++) playing+=play[i];
-   if (!(playing))
+     while(!(joytrg(0) & JOY_STRT))
      {
-      RInit(DexN);
-      turn=STurn(DexN);
-     }*/
-   music_update();
-   vsync(2);
- }
+       rand();
+       vsync();
+     }
+
+     blank(1,1,30,1);
+     put_string("Enemy attacks",3,1);
+     
+     target=rand()%2;
+     while(HPp[target]<1) target=rand()%2;
+
+      for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
+      for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
+       wound=fight(AtkN,DexN,DefP[target],DexP[target]);
+       if (wound)
+         {
+    HPp[target]-=wound;
+          damage(wound,200,(target+1)*32);
+    if (HPp[target]<0) HPp[target]=0;
+         }
+         else
+    put_string("He missed",5,1);
+
+     /*turn=STurn(turn);*/
+     break;
+    }
+
+     /*playing=0;
+     for(i=0;i<5;i++) playing+=play[i];
+     if (!(playing))
+       {
+        RInit(DexN);
+        turn=STurn(DexN);
+       }*/
+     /*music_update();*/
+     vsync(2);
+   }
 
    fightframe(life_enemy,4);
    for(i=0;i<4;i++)
@@ -277,28 +291,28 @@ switch(turn)
 /*********************************************/
 /*            Fight Sequence                 */
 /*********************************************/
-fight(Atk1,Dex1,Def2,Dex2)
-int Atk1,Dex1,Def2,Dex2;
+unsigned int fight(Atk1,Dex1,Def2,Dex2)
+unsigned char Atk1,Dex1,Def2,Dex2;
 {
-int hit,wound;
+unsigned int hit,wound;
  hit=2*(rand() % Dex1) - (rand() % Dex2);
-     if (hit<0)
-	return 0;
-      else
-       {
-       wound=2*(rand() % Atk1) - (rand() % Def2);
-       if (wound<=0)
-	 return 1;
-	else
-	 return wound;
-	}
+   if (hit<0)
+      return 0;
+    else
+    {
+      wound=2*(rand() % Atk1) - (rand() % Def2);
+      if (wound<=0)
+        return 1;
+	    else
+	      return wound;
+    }
 }
 /*********************************************/
 /*              Battle Option                */
 /*********************************************/
 battleselect()
 {
-char select;
+unsigned char select;
 
   select=1;
   put_char('>',1,23);
@@ -320,7 +334,7 @@ char select;
 	 select--;
 	 put_char('>',1,22+select);
        }
-     music_update();
+     /*music_update();*/
      vsync(1);
      rand();
     }
@@ -336,7 +350,7 @@ Magicbattle(Player,enemyHP,enemyres)
 char Player;
 int *enemyHP,enemyres;
 {
-char select,i,j;
+unsigned char select,i,j;
   blank(1,23,30,4);
   border(0,22,24,6);
   border(24,22,8,6);
@@ -360,7 +374,7 @@ switch (Player)
 
   while(!(joytrg(0) & (JOY_STRT | JOY_B)))
   {
-  music_update();
+  /*music_update();*/
   put_number(magicmp[select],2,27,25);
     if (joytrg(0))
    {
@@ -375,7 +389,7 @@ switch (Player)
 	      satb_update();
 	      for(j=0;j<5;j++)
 	      {
-	        music_update();
+	        /*music_update();*/
 	        vsync(1);
 	      }
 	    }
@@ -385,7 +399,7 @@ switch (Player)
 	      satb_update();
 	      for(j=0;j<2;j++)
 	      {
-	        music_update();
+	        /*music_update();*/
 	        vsync(1);
 	      }
 	    }
@@ -451,7 +465,7 @@ switch (Player)
 
   while(!(joytrg(0) & (JOY_STRT | JOY_B)))
   {
-  music_update();
+  /*music_update();*/
   put_number(magicmp[select],2,27,25);
   if (joytrg(0))
    {
@@ -466,7 +480,7 @@ switch (Player)
 	      satb_update();
 	      for(j=0;j<5;j++)
 	      {
-	        music_update();
+	        /*music_update();*/
 	        vsync(1);
 	      }
 	    }
@@ -476,7 +490,7 @@ switch (Player)
 	      satb_update();
 	      for(j=0;j<2;j++)
 	      {
-	        music_update();
+	        /*music_update();*/
 	        vsync(1);
 	      }
 	    }
@@ -630,7 +644,7 @@ char Player;
   vsync();
   while(!(joy(0)))
   {
-    music_update();
+    /*music_update();*/
     vsync();
   }
 }
@@ -693,7 +707,7 @@ char select,i;
       }
     }
    }
-   music_update();
+   /*music_update();*/
    vsync();
   }
 for(i=0; i<8; i++)
@@ -760,7 +774,7 @@ if ((HPp[0]>0) || (HPp[1]>0))
 /*            Select Turn           */
 /************************************/
 STurn(DexN)
-int DexN;
+unsigned int DexN;
 {
 char i;
 char next;
@@ -805,7 +819,7 @@ while(next==100)
   roundCount[4] += DexN;
   if(roundCount[4]>3520) next=4;
 
-  music_update();
+  /*music_update();*/
   satb_update();
   vsync();
 }
@@ -829,7 +843,7 @@ return turn;
 /*            Round Init            */
 /************************************/
 RInit(DexN)
-char DexN;
+unsigned int DexN;
 {
 char i;/*,j,Max;*/
 /*for(i=0;i<4;i++)
@@ -897,15 +911,15 @@ roundCount[4] = rand() % DexN;
 /*             Player 1 battle system                */
 /*****************************************************/
 BattleP1(life_enemy,DefN,DexN,enemyres)
-int *life_enemy,DefN,DexN,enemyres;
+unsigned int *life_enemy,DefN,DexN,enemyres;
 {
-char wound,move,i;
-int res;
+unsigned char move,i;
+unsigned int wound, res;
 move=1;
 
 while(move)
  {
- music_update();
+ /*music_update();*/
  fightframe((*life_enemy),0);
  spr_set(50);
  switch(battleselect())
@@ -915,14 +929,14 @@ while(move)
     for(i=0;i<5;i++)
     {
       spr_x(spr_get_x()-1);
-      music_update();
+      /*music_update();*/
       satb_update();
       vsync();
     }
     for(i=0;i<5;i++)
     {
       spr_x(spr_get_x()+1);
-      music_update();
+      /*music_update();*/
       satb_update();
       vsync();
     }
@@ -975,15 +989,15 @@ while(move)
 /*            Player 2 battle system               */
 /***************************************************/
 BattleP2(life_enemy,DefN,DexN,enemyres)
-int *life_enemy,DefN,DexN,enemyres;
+unsigned int *life_enemy,DefN,DexN,enemyres;
 {
-char wound,move,i;
-int res;
+unsigned char move,i;
+unsigned int wound,res;
 move=1;
 
 while(move)
  {
- music_update();
+ /*music_update();*/
  fightframe((*life_enemy),1);
  spr_set(51);
  switch(battleselect())
@@ -993,14 +1007,14 @@ while(move)
     for(i=0;i<5;i++)
     {
       spr_x(spr_get_x()-1);
-      music_update();
+      /*music_update();*/
       satb_update();
       vsync();
     }
     for(i=0;i<5;i++)
     {
       spr_x(spr_get_x()+1);
-      music_update();
+      /*music_update();*/
       satb_update();
       vsync();
     }
@@ -1063,10 +1077,10 @@ while(move)
 /*        Graphique damage function         */
 /********************************************/
 damage(numbers,x,y)
-int numbers;
+unsigned int numbers;
 char x,y;
 {
-char i,j,max;
+unsigned char i,j,max;
 
 for(i=0;i<4;i++)
 {
@@ -1124,7 +1138,7 @@ for(j=0;j<4;j++)
   {
    spr_set(13-i);
    spr_y(spr_get_y()-1);
-   music_update();
+   /*music_update();*/
    satb_update();
    vsync();
   }
@@ -1135,7 +1149,7 @@ for(j=0;j<10;j++)
   {
    spr_set(13-i);
    spr_y(spr_get_y()+1);
-   music_update();
+   /*music_update();*/
    satb_update();
    vsync();
   }
@@ -1143,7 +1157,7 @@ for(j=0;j<10;j++)
 
 for(i=0;i<30;i++)
 {
-  music_update();
+  /*music_update();*/
   vsync(1);
 }
 for(i=0;i<4;i++)

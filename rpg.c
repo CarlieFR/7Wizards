@@ -3,16 +3,15 @@
 /********************************/
 
 
-#include "huc.h"
+#include <huc.h>
+#include <st.h>
 #include "var.c"
 #include "const.c"
 #include "text.c"
-#include "musicsystem.c"
 #include "silence.c"
-#include "music5.c"
-#include "essai.c"
-/* #include "music4.c" */
-#include "music1.c" 
+
+#incasm("Merry.asm")
+extern struct st_header Merry[];
 
 #include "graph.c"
 
@@ -46,8 +45,8 @@ if(gameState==0)
  ExpP[1]=10;
  select=0;
  /* Music initialisation*/
- music5Init();
- count=0;
+ st_init();
+ st_set_song(bank(Merry), Merry);
 
   load_background(titlegfx,titlepal,titlebat,32,28);
 
@@ -66,8 +65,11 @@ if(gameState==0)
   put_string("Change name",11,20);
   put_string("Begin game",11,18);
   put_char('-',9,18);
+  
+  /*st_reset();*/
+  st_play_song();
 
-  while (!(joytrg(0) & JOY_STRT))
+  while (!(joytrg(0) & (JOY_STRT | JOY_A | JOY_B)))
   {
    if ((joytrg(0) & JOY_UP) && (select>0))
      {
@@ -82,11 +84,12 @@ if(gameState==0)
       put_char('-',9,18+2*select);
      }
     vsync(1);
-    music_update();
+    /* st_play_song();
+    /*music_update();*/
   }
 
  silence();
- count=0;
+ /*count=0;*/
 
  switch (select)
  {

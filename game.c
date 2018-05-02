@@ -3,7 +3,7 @@
 /************************************************/
 game()
 {
-char i;
+unsigned char i;
 
   if(gameState==0) {
     vsync(20);
@@ -43,7 +43,7 @@ char i;
 
 while (1)
 {
-  silence();
+  st_reset();
   
  switch (pos)
  {

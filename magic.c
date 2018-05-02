@@ -163,7 +163,7 @@ int i,compteur;
 	 spr_pattern(FIREMAGICPTR+compteur/2*0x40);
 	 compteur++;
 	 if (compteur==6) compteur=0;
-	 music_update();
+	 /*music_update();*/
          satb_update();
          vsync();
        }
@@ -177,7 +177,7 @@ int i,compteur;
 	 spr_pattern(FIREMAGICPTR+compteur/2*0x40);
 	 compteur++;
 	 if (compteur==6) compteur=0;
-	 music_update();
+	 /*music_update();*/
          satb_update();
          vsync();
        }
@@ -200,7 +200,7 @@ int i;
   for(i=28;i<Y-8;i+=2)
    {
     spr_y(i);
-    music_update();
+    /*music_update();*/
     satb_update();
     vsync();
    }
@@ -208,7 +208,7 @@ int i;
   for(i=Y-8;i<Y-4;i++)
    {
     spr_y(i);
-    music_update();
+    /*music_update();*/
     satb_update();
     vsync();
    }
@@ -216,7 +216,7 @@ int i;
   for(i=Y-4;i>Y;i++)
    {
     spr_y(i);
-    music_update();
+    /*music_update();*/
     satb_update();
     vsync();
    }
@@ -228,7 +228,7 @@ int i;
      spr_hide();
    else
      spr_show();
-   music_update();
+   /*music_update();*/
    satb_update();
    vsync();
   }

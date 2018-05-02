@@ -104,7 +104,7 @@ nb_monsters = 0;
 map_battle_bg = PLAIN_BG;
  
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
  
 }
@@ -196,7 +196,7 @@ event_in_map = event_in_2;
  map_battle_bg = PLAIN_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
 
 
@@ -293,7 +293,7 @@ event_in_map = event_in_3;
  map_battle_bg = PLAIN_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
 }
 
@@ -378,7 +378,7 @@ event_in_map = event_in_4;
  map_battle_bg = PAVE_CITY_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
 }
 
@@ -467,6 +467,6 @@ event_in_map = event_in_house1;
  map_battle_bg = PAVE_CITY_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
 }

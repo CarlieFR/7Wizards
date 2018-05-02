@@ -196,7 +196,7 @@ const int music4TrackLength5[]={0};
 
 music4Init()
 {
-Mus_Length=892;
+/*Mus_Length=892;
 Mus_Repeat=0;
 Track0=music4Track0;
 TrackLength0=music4TrackLength0;
@@ -217,5 +217,5 @@ initchannelsquare(1);
 initchannelsine(2);
 initchannelsquare(3);
 initchannelnoise(4);
-initchannelnoise(5);
+initchannelnoise(5);*/
 }

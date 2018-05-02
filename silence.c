@@ -13,7 +13,9 @@ const int silenceTrackLength5[]={0};
 
 silence()
 {
-Track0=silenceTrack0;
+  st_stop_song();
+  irq_disable_user(IRQ_VSYNC);
+/*Track0=silenceTrack0;
 TrackLength0=silenceTrackLength0;
 Track1=silenceTrack1;
 TrackLength1=silenceTrackLength1;
@@ -36,7 +38,7 @@ initchannelnoise(2);
 initchannelnoise(3);
 initchannelnoise(4);
 initchannelnoise(5);
-
+*/
 currentMusic = 0;
-playmusic();
+/*playmusic();*/
 }

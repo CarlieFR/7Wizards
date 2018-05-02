@@ -2,9 +2,9 @@
 /*           Create Border Function            */
 /***********************************************/
 border(x,y,i,j)
-char x,y,i,j;
+unsigned char x,y,i,j;
 {
-char a;
+unsigned char a;
 
 set_bgpal(0,screenpal);
 load_sprites(0X1000,screengfx);
@@ -34,9 +34,9 @@ while(a<j-1)
 /*          Fill with blank Function           */
 /***********************************************/
 blank(x,y,i,j)
-char x,y,i,j;
+unsigned char x,y,i,j;
 {
-char a,b;
+unsigned char a,b;
 a=0;
 while(a<i)
  {

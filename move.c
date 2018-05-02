@@ -426,6 +426,11 @@ int type, arg1, arg2;
   
 }
 
+/**
+ * Teleport caracter to map mapID.
+ * Basically a big switch as you can't use a method pointer.
+ * mapId : int : id of the destination map
+ */
 teleport(mapId)
 int mapId;
 {
@@ -446,7 +451,6 @@ int mapId;
       map4();
       break;
     case 20000:
-      /*silence();*/
       housemap1();
       break;
   }
@@ -537,7 +541,7 @@ move() {
     manage_move();
     
     manage_pattern();
-    music_update();
+    /*music_update();*/
     vsync();
   }
   return -1;

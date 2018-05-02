@@ -38,7 +38,7 @@ const int intro2TrackLength5[]={0};
 
 essaiInit()
 {
-Mus_Length=63;
+/*Mus_Length=63;
 Mus_Repeat=0;
 Track0=intro2Track0;
 TrackLength0=intro2TrackLength0;
@@ -59,5 +59,5 @@ initchannelsaw(1);
 initchannelsquare(2);
 initchannelsquare(3);
 initchannelnoise(4);
-initchannelnoise(5);
+initchannelnoise(5);*/
 }

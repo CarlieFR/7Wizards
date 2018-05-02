@@ -208,7 +208,7 @@ const int music1TrackLength5[]={0};
 
 music1Init()
 {
-Mus_Length=627;
+/*Mus_Length=627;
 Mus_Repeat=0;
 Track0=music1Track0;
 TrackLength0=music1TrackLength0;
@@ -229,7 +229,7 @@ initchannelsaw(1);
 initchannelsine(2);
 initchannelsquare(3);
 initchannelnoise(4);
-initchannelnoise(5);
+initchannelnoise(5);*/
 
 currentMusic = 1;
 }
