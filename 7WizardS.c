@@ -4,8 +4,10 @@
 
 
 #include <huc.h>
-#include "var.c"
+#include <st.h>
+
 #include "const.c"
+#include "var.c"
 
 main()
 {
@@ -36,6 +38,8 @@ main()
  MaxHP[3]=LIFEMAX;
  MaxMP[3]=MPMAX;
  set_screen_size(SCR_SIZE_32x32);
+ 
+ st_init();
 
  FirstTime=1;
  cd_execoverlay(OVL_RPG);

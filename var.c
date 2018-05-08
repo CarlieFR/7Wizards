@@ -1,6 +1,6 @@
 char Entry[7]; /* temporary name */
 char NamP1[7],NamP2[7],NamP3[7],NamP4[7]; /* name Player 1-4 */
-unsigned char DexP[4],AtkP[4],DefP[4];
+STAT_TYPE DexP[4],AtkP[4],DefP[4];
 unsigned int ExpP[4]; /* carac Player 1-4*/
 unsigned int spriteX;
 unsigned int spriteY;

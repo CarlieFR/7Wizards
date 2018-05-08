@@ -1,11 +1,27 @@
+/* Overlay values */
 #define OVL_INIT 1
 #define OVL_RPG 2
 #define OVL_BATTLE 3
 
+/* Coding */
 #define NULL 0
 
+/* attribute types */
+#define STAT_TYPE unsigned char
+#define HP_TYPE int
+#define MP_TYPE unsigned int
+#define RESIST_TYPE unsigned int
+#define MAX_HPMP_TYPE unsigned int
+
+/* game values */
 #define LIFEMAX 500
 #define MPMAX 30
+#define DEX 40
+#define ATK 50
+#define DEF 50
+#define COUNTMAX 6
+
+/* graph values */
 #define TITLEPCX "title.pcx"
 #define SPRITE "sprite1.pcx"
 #define PERSO1PCX "perso1.pcx"
@@ -25,10 +41,6 @@
 #define ICE_MAGICPAL 5
 #define BARPAL 8
 #define TILE_PAL 12
-#define DEX 40
-#define ATK 50
-#define DEF 50
-#define COUNTMAX 6
 #define MAGICSPR 30
 #define Ram_tiles 0X1200
 #define FIREMAGICPTR 0x7000

@@ -2,15 +2,15 @@ const char *monsterName[] =
 {"Goblin",
  "Blob"
 };
-const unsigned char monsterAtk[] =
+const STAT_TYPE monsterAtk[] =
 {50,
  25
 };
-const unsigned char monsterDef[] =
+const STAT_TYPE monsterDef[] =
 {50,
  20
 };
-const unsigned char monsterDex[] =
+const STAT_TYPE monsterDex[] =
 {40,
  40
 };
@@ -22,7 +22,7 @@ const unsigned int monsterExp[] =
 {50,
  15
 };
-const unsigned int monsterRes[] =
+const RESIST_TYPE monsterRes[] =
 {0x0000,
  0x0012
 };

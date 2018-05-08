@@ -5,8 +5,8 @@
 #include <huc.h>
 #include <st.h>
 
-#include "var.c"
 #include "const.c"
+#include "var.c"
 #include "monsters.c"
 #include "magic.c"
 /*#include "musicsystem.c"
@@ -26,112 +26,113 @@ extern struct st_header TestMelancholia[];
 /****************************************/
 main()
 {
-unsigned int Life,Exp,enemyres;
-unsigned char DexN,DefN,AtkN;
-int oldHP[4],life_enemy;
-unsigned int select,wound,res;
-char turn,continu,target,i,playing;
+  unsigned int Exp;
+  RESIST_TYPE enemyres;
+  STAT_TYPE DexN,DefN,AtkN;
+  HP_TYPE Life,oldHP[4],life_enemy, wound;
+  char turn,continu,target,i,playing;
 
-Life = (monsterLifeMax[monsterID]*3 + (rand() % monsterLifeMax[monsterID]))/4;
-Exp = monsterExp[monsterID];
-enemyres = monsterRes[monsterID];
-AtkN = monsterAtk[monsterID];
-DefN = monsterDef[monsterID];
-DexN = monsterDex[monsterID];
-cls();
-init_graph();
-
-/*silence();*/
-/*music4Init();*/
-st_init();
-st_set_song(bank(TestMelancholia), TestMelancholia);
-/*st_reset();*/
-st_play_song();
-
-set_font_color(1,2);
-load_default_font();
-
-for(i=0;i<4;i++)
-oldHP[i]=HPp[i];
-
-while(1)
-{
-
-  satb_update();
+  Life = (monsterLifeMax[monsterID]*3 + (rand() % monsterLifeMax[monsterID]))/4;
+  Exp = monsterExp[monsterID];
+  enemyres = monsterRes[monsterID];
+  AtkN = monsterAtk[monsterID];
+  DefN = monsterDef[monsterID];
+  DexN = monsterDex[monsterID];
   cls();
+  init_graph();
+
+  /*silence();*/
+  /*music4Init();*/
+  st_set_song(bank(TestMelancholia), TestMelancholia);
+  /*st_reset();*/
+  st_reset();
+
+  st_play_song();
+
   set_font_color(1,2);
   load_default_font();
-  battlescreen();
-  border(10,22,22,6);
 
   for(i=0;i<4;i++)
-   HPp[i]=oldHP[i];
-  life_enemy=Life;
-  continu=1;
-  RInit(DexN);
+    oldHP[i]=HPp[i];
 
-for(i=0;i<4;i++)
- {
-  if (HPp[i])
+  while(1)
   {
-   BattleX[i]=200;
-   BattleY[i]=16+(i+1)*32;
-   spr_set(50+i);
-   spr_pri(1);
-   if (i==0)
-   	spr_pattern(PLAYER1PTR+0x240);
-   else
-	spr_pattern(PLAYER2PTR+0x240);
-   spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-   if(i==0)
-   	spr_pal(P1PAL);
-   else
-   	spr_pal(P2PAL);
-   spr_x(BattleX[i]);
-   spr_y(BattleY[i]);
-   spr_show();
-  }
- }
 
-   spr_set(54);
-   spr_pri(1);
-   spr_pattern(0X6000);
-   spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_32x32);
-   spr_pal(SPRITEPAL);
-   BattleX[4]=40;
-   BattleY[4]=80;
-   spr_x(BattleX[4]);
-   spr_y(BattleY[4]);
-   spr_show();
+    satb_update();
+    cls();
+    set_font_color(1,2);
+    load_default_font();
+    battlescreen();
+    border(10,22,22,6);
 
- while ((HPp[0]>0) && (HPp[1]>0) && (life_enemy>0))
- {
-   fightframe(life_enemy,turn);
-   turn=STurn(DexN);
-   /*play[turn]=0;*/
-   /*spr_set(50+turn);*/
-   satb_update();
+    for(i=0;i<4;i++)
+      HPp[i]=oldHP[i];
+    life_enemy=Life;
+    continu=1;
+    RInit(DexN);
 
-  switch(turn)
+    for(i=0;i<4;i++)
     {
-  /*    PLAYER 1    */
-    case 0:
+      if (HPp[i])
+      {
+        BattleX[i]=200;
+        BattleY[i]=16+(i+1)*32;
+        spr_set(50+i);
+        spr_pri(1);
+        if (i==0)
+          spr_pattern(PLAYER1PTR+0x240);
+        else
+          spr_pattern(PLAYER2PTR+0x240);
+        spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+        if(i==0)
+          spr_pal(P1PAL);
+        else
+          spr_pal(P2PAL);
+        spr_x(BattleX[i]);
+        spr_y(BattleY[i]);
+        spr_show();
+      }
+    }
 
-    BattleP1(&life_enemy,DefN,DexN,enemyres);
-    /*turn=STurn(turn);*/
+    spr_set(54);
+    spr_pri(1);
+    spr_pattern(0X6000);
+    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_32x32);
+    spr_pal(SPRITEPAL);
+    BattleX[4]=40;
+    BattleY[4]=80;
+    spr_x(BattleX[4]);
+    spr_y(BattleY[4]);
+    spr_show();
 
-    break;
+    while ((HPp[0]>0) && (HPp[1]>0) && (life_enemy>0))
+    {
+      fightframe(life_enemy,turn);
+      turn=STurn(DexN);
+      /*play[turn]=0;*/
+      /*spr_set(50+turn);*/
+      satb_update();
 
-  /*    PLAYER 2    */
-    case 1:
+      switch(turn)
+      {
+        /*    PLAYER 1    */
+        case 0:
 
-    BattleP2(&life_enemy,DefN,DexN,enemyres);
-    /*turn=STurn(turn);*/
+          BattleP1(&life_enemy,DefN,DexN,enemyres);
+          /*turn=STurn(turn);*/
 
-    break;
+          break;
 
-  /*    PLAYER 3    */
-  /*  case 2:
+          /*    PLAYER 2    */
+        case 1:
+
+          BattleP2(&life_enemy,DefN,DexN,enemyres);
+          /*turn=STurn(turn);*/
+
+          break;
+
+          /*    PLAYER 3    */
+          /*  case 2:
 
     switch(battleselect())
     {
@@ -166,7 +167,7 @@ for(i=0;i<4;i++)
     break;
 
   /*    PLAYER 4    */
-  /*  case 3:
+          /*  case 3:
 
     switch(battleselect())
     {
@@ -201,86 +202,86 @@ for(i=0;i<4;i++)
     break;
 
   /*      ENEMY 1      */
-   case 4:
-     spr_set(54);
-     /*spr_pal(SPRITEPAL);*/
-     blank(1,23,8,4);
-     border(0,22,10,6);
-     put_string("PUSH",3,23);
-     put_string("START",3,25);
+        case 4:
+          spr_set(54);
+          /*spr_pal(SPRITEPAL);*/
+          blank(1,23,8,4);
+          border(0,22,10,6);
+          put_string("PUSH",3,23);
+          put_string("START",3,25);
 
-     while(!(joytrg(0) & JOY_STRT))
-     {
-       rand();
-       vsync();
-     }
+          while(!(joytrg(0) & JOY_STRT))
+          {
+            rand();
+            vsync();
+          }
 
-     blank(1,1,30,1);
-     put_string("Enemy attacks",3,1);
-     
-     target=rand()%2;
-     while(HPp[target]<1) target=rand()%2;
+          blank(1,1,30,1);
+          put_string("Enemy attacks",3,1);
 
-      for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
-      for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
-       wound=fight(AtkN,DexN,DefP[target],DexP[target]);
-       if (wound)
-         {
-    HPp[target]-=wound;
-          damage(wound,200,(target+1)*32);
-    if (HPp[target]<0) HPp[target]=0;
-         }
-         else
-    put_string("He missed",5,1);
+          target=rand()%2;
+          while(HPp[target]<1) target=rand()%2;
 
-     /*turn=STurn(turn);*/
-     break;
-    }
+          for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
+          for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
+          wound=fight(AtkN,DexN,DefP[target],DexP[target]);
+          if (wound)
+          {
+            HPp[target]-=wound;
+            damage(wound,200,(target+1)*32);
+            if (HPp[target]<0) HPp[target]=0;
+          }
+          else
+            put_string("He missed",5,1);
 
-     /*playing=0;
+          /*turn=STurn(turn);*/
+          break;
+      }
+
+      /*playing=0;
      for(i=0;i<5;i++) playing+=play[i];
      if (!(playing))
        {
         RInit(DexN);
         turn=STurn(DexN);
        }*/
-     /*music_update();*/
-     vsync(2);
-   }
+      /*music_update();*/
+      vsync(2);
+    }
 
-   fightframe(life_enemy,4);
-   for(i=0;i<4;i++)
-     put_number(HPp[i],5,25,23+i);
-   put_number(life_enemy,5,25,21);
+    fightframe(life_enemy,4);
+    for(i=0;i<4;i++)
+      put_number(HPp[i],5,25,23+i);
+    put_number(life_enemy,5,25,21);
 
-  silence();
-  battleEnd=1;
-  vsync(60);
-  blank(1,1,30,1);
+    silence();
+    battleEnd=1;
+    vsync(60);
+    blank(1,1,30,1);
 
- if (!(bonus(Exp)))
+    if (!(bonus(Exp)))
     {
-     for(i=0;i<5;i++)
-     {
-      spr_set(50+i);
-      spr_hide();
-     }
-     for(i=0;i<4;i++)
-     {
-      spr_set(10+i);
-      spr_hide();
-     }
-     for(i=0;i<8;i++)
-     {
-      spr_set(BARBASESPR+i);
-      spr_hide();
-     }
-     satb_update();
+      for(i=0;i<5;i++)
+      {
+        spr_set(50+i);
+        spr_hide();
+      }
+      for(i=0;i<4;i++)
+      {
+        spr_set(10+i);
+        spr_hide();
+      }
+      for(i=0;i<8;i++)
+      {
+        spr_set(BARBASESPR+i);
+        spr_hide();
+      }
+      satb_update();
 
-     spr_set(0);
-     spr_pal(P1PAL);
-     /*return;*/
-     cd_execoverlay(OVL_RPG);
+      spr_set(0);
+      spr_pal(P1PAL);
+      /*return;*/
+      cd_execoverlay(OVL_RPG);
     }
   }
 
@@ -292,27 +293,43 @@ for(i=0;i<4;i++)
 /*            Fight Sequence                 */
 /*********************************************/
 unsigned int fight(Atk1,Dex1,Def2,Dex2)
-unsigned char Atk1,Dex1,Def2,Dex2;
+STAT_TYPE Atk1,Dex1,Def2,Dex2;
 {
-unsigned int hit,wound;
- hit=2*(rand() % Dex1) - (rand() % Dex2);
-   if (hit<0)
-      return 0;
+  int hit,wound;
+  unsigned int randResult;
+  /* Using randResult to be sure to have a positive random result until better random doc is found */
+  randResult = rand();
+  hit = randResult % Dex1;
+  randResult = rand();
+  hit += randResult % Dex1;
+  randResult = rand();
+  hit -= randResult % Dex2;
+  /*hit=2*(rand() % Dex1) - (rand() % Dex2);*/
+  if (hit<0)
+    return 0;
+  else
+  {
+    randResult = rand();
+    wound = randResult % Atk1;
+    randResult = rand();
+    wound += randResult % Atk1;
+    randResult = rand();
+    wound -= randResult % Def2;
+    /*wound=2*(rand() % Atk1) - (rand() % Def2);*/
+    if (wound<=0)
+      return 1;
+    else if (wound > 9999)
+      return 9999;
     else
-    {
-      wound=2*(rand() % Atk1) - (rand() % Def2);
-      if (wound<=0)
-        return 1;
-	    else
-	      return wound;
-    }
+      return wound;
+  }
 }
 /*********************************************/
 /*              Battle Option                */
 /*********************************************/
 battleselect()
 {
-unsigned char select;
+  unsigned char select;
 
   select=1;
   put_char('>',1,23);
@@ -323,34 +340,36 @@ unsigned char select;
   border(0,22,10,6);
 
   while(!(joytrg(0) & JOY_A))
-    {
-     if ((joytrg(0) & JOY_DOWN) && (select<4))
-       { put_char(' ',1,22+select);
-	 select++;
-	 put_char('>',1,22+select);
-       }
-     if ((joytrg(0) & JOY_UP) && (select>1))
-       { put_char(' ',1,22+select);
-	 select--;
-	 put_char('>',1,22+select);
-       }
-     /*music_update();*/
-     vsync(1);
-     rand();
+  {
+    if ((joytrg(0) & JOY_DOWN) && (select<4))
+    { put_char(' ',1,22+select);
+    select++;
+    put_char('>',1,22+select);
     }
+    if ((joytrg(0) & JOY_UP) && (select>1))
+    { put_char(' ',1,22+select);
+    select--;
+    put_char('>',1,22+select);
+    }
+    /*music_update();*/
+    vsync(1);
+    rand();
+  }
   put_char(' ',1,22+select);
   blank(1,1,30,1);
 
-return select;
+  return select;
 }
 /*********************************************/
 /*              Battle Magic                 */
 /*********************************************/
 Magicbattle(Player,enemyHP,enemyres)
 char Player;
-int *enemyHP,enemyres;
+int *enemyHP;
+RESIST_TYPE enemyres;
 {
-unsigned char select,i,j;
+  unsigned char select,i,j;
+
   blank(1,23,30,4);
   border(0,22,24,6);
   border(24,22,8,6);
@@ -359,195 +378,204 @@ unsigned char select,i,j;
   put_char('>',1,23+select);
   vsync();
 
-for(i=0; i<8; i++)
-{
-  spr_set(BARBASESPR+i);
-  spr_hide();
-}
-satb_update();
-
-switch (Player)
-{
- case 0: /* Player 1 magic */
- {
-  for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-
-  while(!(joytrg(0) & (JOY_STRT | JOY_B)))
+  for(i=0; i<8; i++)
   {
-  /*music_update();*/
-  put_number(magicmp[select],2,27,25);
-    if (joytrg(0))
-   {
-     if (joytrg(0) & JOY_A)
-      {
-       spr_set(50);
-        for(i=0;i<6;i++)
-	  {
-	   if (i&0X1)
-	    {
-	      spr_pattern(PLAYER1PTR+0x240);
-	      satb_update();
-	      for(j=0;j<5;j++)
-	      {
-	        /*music_update();*/
-	        vsync(1);
-	      }
-	    }
-	   else
-	    {
-	      spr_pattern(PLAYER1PTR+0x280);
-	      satb_update();
-	      for(j=0;j<2;j++)
-	      {
-	        /*music_update();*/
-	        vsync(1);
-	      }
-	    }
-	  }
-	switch(select)
-	{
-	 case 0:
-	  {
-	   Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
-	   break;
-	  }
-	 case 1:
-	  {
-	   Icefall(BattleX[4],BattleY[4]);
-	   break;
-	  }
-	 default:
-	  {
-	   Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
-	   break;
-	  }
-	}/*end switch*/
-        Magiceffect(Player,select,enemyHP,0,enemyres);
-	for(i=0; i<8; i++)
-	{
-	  spr_set(BARBASESPR+i);
-	  spr_show();
-	}
-	satb_update();
-	return;
-      }
-     if ((joytrg(0) & JOY_UP) && (select>0)) select--;
-     if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
-     blank(1,23,22,4);
-   if (select<2)
-    {
-     put_char('>',1,23+select);
-     for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-    }
-   else
-    {
-     if (select==9)
-      {
-       put_char('>',1,26);
-       for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
-      }
-     else
-      {
-       put_char('>',1,25);
-       for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
-      }
-    }
-   }
-
-   vsync();
+    spr_set(BARBASESPR+i);
+    spr_hide();
   }
- }
+  satb_update();
 
-
- case 1: /* Player 2 magic */
- {
-  for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-
-  while(!(joytrg(0) & (JOY_STRT | JOY_B)))
+  switch (Player)
   {
-  /*music_update();*/
-  put_number(magicmp[select],2,27,25);
-  if (joytrg(0))
-   {
-     if (joytrg(0) & JOY_A)
-      {
-       spr_set(51);
-        for(i=0;i<6;i++)
-	  {
-	   if (i&0X1)
-	    {
-	      spr_pattern(PLAYER2PTR+0x240);
-	      satb_update();
-	      for(j=0;j<5;j++)
-	      {
-	        /*music_update();*/
-	        vsync(1);
-	      }
-	    }
-	   else
-	    {
-	      spr_pattern(PLAYER2PTR+0x280);
-	      satb_update();
-	      for(j=0;j<2;j++)
-	      {
-	        /*music_update();*/
-	        vsync(1);
-	      }
-	    }
-	  }
-	switch(select)
-	{
-	 case 0:
-	  {
-	   Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
-	   break;
-	  }
-	 case 1:
-	  {
-	   Icefall(BattleX[4],BattleY[4]);
-	   break;
-	  }
-	 default:
-	  {
-	   Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
-	   break;
-	  }
-	}/*end switch*/
-	Magiceffect(Player,select,enemyHP,0,enemyres);
-	for(i=0; i<8; i++)
-	{
-	  spr_set(BARBASESPR+i);
-	  spr_show();
-	}
-	satb_update();
-	return;
-      }
-     if ((joytrg(0) & JOY_UP) && (select>0)) select--;
-     if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
-     blank(1,23,22,4);
-   if (select<2)
+    case 0: /* Player 1 magic */
     {
-     put_char('>',1,23+select);
-     for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-    }
-   else
-    {
-     if (select==9)
-      {
-       put_char('>',1,26);
-       for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
-      }
-     else
-      {
-       put_char('>',1,25);
-       for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
-      }
-    }
-   }
+      for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
 
-   vsync();
-  }
-/*  case 2:
+      while(!(joytrg(0) & (JOY_STRT | JOY_B)))
+      {
+        /*music_update();*/
+        put_number(magicmp[select],2,27,25);
+        if (joytrg(0))
+        {
+          if (joytrg(0) & JOY_A)
+          {
+            spr_set(50);
+            for(i=0;i<6;i++)
+            {
+              if (i&0X1)
+              {
+                spr_pattern(PLAYER1PTR+0x240);
+                satb_update();
+                for(j=0;j<5;j++)
+                {
+                  /*music_update();*/
+                  vsync(1);
+                }
+              }
+              else
+              {
+                spr_pattern(PLAYER1PTR+0x280);
+                satb_update();
+                for(j=0;j<2;j++)
+                {
+                  /*music_update();*/
+                  vsync(1);
+                }
+              }
+            }
+            
+            /* Magic graphical effect */
+            switch(select)
+            {
+              case 0:
+              {
+                Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
+                break;
+              }
+              case 1:
+              {
+                Icefall(BattleX[4],BattleY[4]);
+                break;
+              }
+              default:
+              {
+                Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
+                break;
+              }
+            }/*end switch*/
+
+            (*enemyHP) -= magicDamage(Player,select,enemyres);
+
+            for(i=0; i<8; i++)
+            {
+              spr_set(BARBASESPR+i);
+              spr_show();
+            }
+            satb_update();
+            return;
+          }
+          
+          if ((joytrg(0) & JOY_UP) && (select>0)) select--;
+          if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
+          blank(1,23,22,4);
+          if (select<2)
+          {
+            put_char('>',1,23+select);
+            for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
+          }
+          else
+          {
+            if (select==9)
+            {
+              put_char('>',1,26);
+              for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
+            }
+            else
+            {
+              put_char('>',1,25);
+              for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
+            }
+          }
+        }
+
+        vsync();
+      }
+    }
+
+
+    case 1: /* Player 2 magic */
+    {
+      for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
+
+      while(!(joytrg(0) & (JOY_STRT | JOY_B)))
+      {
+        /*music_update();*/
+        put_number(magicmp[select],2,27,25);
+        if (joytrg(0))
+        {
+          if (joytrg(0) & JOY_A)
+          {
+            spr_set(51);
+            for(i=0;i<6;i++)
+            {
+              if (i&0X1)
+              {
+                spr_pattern(PLAYER2PTR+0x240);
+                satb_update();
+                for(j=0;j<5;j++)
+                {
+                  /*music_update();*/
+                  vsync(1);
+                }
+              }
+              else
+              {
+                spr_pattern(PLAYER2PTR+0x280);
+                satb_update();
+                for(j=0;j<2;j++)
+                {
+                  /*music_update();*/
+                  vsync(1);
+                }
+              }
+            }
+            
+            /* Magic graphical effect */
+            switch(select)
+            {
+              case 0:
+              {
+                Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
+                break;
+              }
+              case 1:
+              {
+                Icefall(BattleX[4],BattleY[4]);
+                break;
+              }
+              default:
+              {
+                Fireball(BattleX[Player],BattleY[Player],BattleX[4],BattleY[4]);
+                break;
+              }
+            }/*end switch*/
+            
+            (*enemyHP) -= magicDamage(Player,select,enemyres);
+            
+            for(i=0; i<8; i++)
+            {
+              spr_set(BARBASESPR+i);
+              spr_show();
+            }
+            satb_update();
+            return;
+          }
+          if ((joytrg(0) & JOY_UP) && (select>0)) select--;
+          if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
+          blank(1,23,22,4);
+          if (select<2)
+          {
+            put_char('>',1,23+select);
+            for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
+          }
+          else
+          {
+            if (select==9)
+            {
+              put_char('>',1,26);
+              for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
+            }
+            else
+            {
+              put_char('>',1,25);
+              for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
+            }
+          }
+        }
+
+        vsync();
+      }
+      /*  case 2:
  {
   for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
 
@@ -624,14 +652,14 @@ switch (Player)
    vsync();
    }
  } */
-}
-}
-for(i=0; i<8; i++)
-{
-  spr_set(BARBASESPR+i);
-  spr_show();
-}
-satb_update();
+    }
+  }
+  for(i=0; i<8; i++)
+  {
+    spr_set(BARBASESPR+i);
+    spr_show();
+  }
+  satb_update();
 }
 /*********************************************/
 /*             Battle Special                */
@@ -654,7 +682,7 @@ char Player;
 Battleitem(Player)
 char Player;
 {
-char select,i;
+  char select,i;
   blank(1,23,30,4);
   border(0,22,20,6);
   border(20,22,12,6);
@@ -675,49 +703,49 @@ char select,i;
 
   while(!(joytrg(0) & (JOY_STRT|JOY_B)))
   {
-   put_number(itemnb[select],2,25,25);
+    put_number(itemnb[select],2,25,25);
     if (joytrg(0))
-   {
-     if (joytrg(0) & JOY_A)
-       if (itemnb[select]>0)
-         {
+    {
+      if (joytrg(0) & JOY_A)
+        if (itemnb[select]>0)
+        {
           itemnb[select]--;
           itemeffect(select,Player);
           return 1;
-         }
-     if ((joytrg(0) & JOY_UP) && (select>0)) select--;
-     if ((joytrg(0) & JOY_DOWN) && (select<6)) select++;
-     blank(1,23,18,4);
-   if (select<2)
-    {
-     put_char('>',1,23+select);
-     for(i=0;i<4;i++) put_string(item[i],2,23+i);
-    }
-   else
-    {
-     if (select==6)
+        }
+      if ((joytrg(0) & JOY_UP) && (select>0)) select--;
+      if ((joytrg(0) & JOY_DOWN) && (select<6)) select++;
+      blank(1,23,18,4);
+      if (select<2)
       {
-       put_char('>',1,26);
-       for(i=select-3;i<select+1;i++) put_string(item[i],2,26+i-select);
+        put_char('>',1,23+select);
+        for(i=0;i<4;i++) put_string(item[i],2,23+i);
       }
-     else
+      else
       {
-       put_char('>',1,25);
-       for(i=select-2;i<select+2;i++) put_string(item[i],2,25+i-select);
+        if (select==6)
+        {
+          put_char('>',1,26);
+          for(i=select-3;i<select+1;i++) put_string(item[i],2,26+i-select);
+        }
+        else
+        {
+          put_char('>',1,25);
+          for(i=select-2;i<select+2;i++) put_string(item[i],2,25+i-select);
+        }
       }
     }
-   }
-   /*music_update();*/
-   vsync();
+    /*music_update();*/
+    vsync();
   }
-for(i=0; i<8; i++)
-{
-  spr_set(BARBASESPR+i);
-  spr_show();
-}
-satb_update();
+  for(i=0; i<8; i++)
+  {
+    spr_set(BARBASESPR+i);
+    spr_show();
+  }
+  satb_update();
 
-return 0;
+  return 0;
 }
 /*********************************************/
 /*              Battle Bonus                 */
@@ -725,107 +753,107 @@ return 0;
 bonus(Exp)
 int Exp;
 {
-char i,continu;
-continu=1;
+  char i,continu;
+  continu=1;
 
-if ((HPp[0]>0) || (HPp[1]>0))
-     {
-     put_string("You won",8,1);
-     vsync(60);
-     blank(1,1,30,1);
-     put_string("Got",1,1);
-     put_number(Exp,5,5,1);
-     put_string("experience point(s)",11,1);
-     for(i=0;i<4;i++) ExpP[i]+=Exp;
-     vsync(60);
-     while(!(joy(0)));
-     return 0;
-     }
-   else
-     {
-     put_string("You lost",8,1);
-     put_string("Play again?",7,10);
-     put_char('Y',8,13);
+  if ((HPp[0]>0) || (HPp[1]>0))
+  {
+    put_string("You won",8,1);
+    vsync(60);
+    blank(1,1,30,1);
+    put_string("Got",1,1);
+    put_number(Exp,5,5,1);
+    put_string("experience point(s)",11,1);
+    for(i=0;i<4;i++) ExpP[i]+=Exp;
+    vsync(60);
+    while(!(joy(0)));
+    return 0;
+  }
+  else
+  {
+    put_string("You lost",8,1);
+    put_string("Play again?",7,10);
+    put_char('Y',8,13);
 
-     vsync(60);
+    vsync(60);
 
-     while (!(joytrg(0) & JOY_STRT))
-       {
-	if (joytrg(0) & 0xf7)
-	  {
-	    if (continu)
-		{
-		 continu--;
-		 put_char('N',8,13);
-		}
-	      else
-		{
-		 continu++;
-		 put_char('Y',8,13);
-		}
-	  }
-       vsync();
-     }
-     return continu;
-     }
+    while (!(joytrg(0) & JOY_STRT))
+    {
+      if (joytrg(0) & 0xf7)
+      {
+        if (continu)
+        {
+          continu--;
+          put_char('N',8,13);
+        }
+        else
+        {
+          continu++;
+          put_char('Y',8,13);
+        }
+      }
+      vsync();
+    }
+    return continu;
+  }
 }
 
 /************************************/
 /*            Select Turn           */
 /************************************/
 STurn(DexN)
-unsigned int DexN;
+STAT_TYPE DexN;
 {
-char i;
-char next;
+  char i;
+  char next;
 
-next = 100;
+  next = 100;
 
-while(next==100)
-{
-  for(i=0;i<4;i++)
+  while(next==100)
   {
-    if(HPp[i]>0)
+    for(i=0;i<4;i++)
     {
-      roundCount[i] += DexP[i];
-      if(roundCount[i]>3520) next=i;
-    }
-    spr_set(BARBASESPR+(i<<1));
-    if((roundCount[i]>>7)<14)
-    {
-      spr_pattern(ACTIONBARPTR+0x40*(roundCount[i]>>7));
-    }
-    else
-    {
-      spr_pattern(ACTIONBARPTR+0x340);
-    }
-    spr_set(BARBASESPR+(i<<1)+1);
-    if((roundCount[i]>>7)<14)
-    {
-      spr_pattern(ACTIONBARPTR+0x380);
-    }
-    else
-    {
-      if(roundCount[i]<=3520)
+      if(HPp[i]>0)
       {
-        spr_pattern(ACTIONBARPTR+0x380+0x40*((roundCount[i]>>7)-14));
+        roundCount[i] += DexP[i];
+        if(roundCount[i]>3520) next=i;
+      }
+      spr_set(BARBASESPR+(i<<1));
+      if((roundCount[i]>>7)<14)
+      {
+        spr_pattern(ACTIONBARPTR+0x40*(roundCount[i]>>7));
       }
       else
       {
-        spr_pattern(ACTIONBARPTR+0x380+0x340);
+        spr_pattern(ACTIONBARPTR+0x340);
+      }
+      spr_set(BARBASESPR+(i<<1)+1);
+      if((roundCount[i]>>7)<14)
+      {
+        spr_pattern(ACTIONBARPTR+0x380);
+      }
+      else
+      {
+        if(roundCount[i]<=3520)
+        {
+          spr_pattern(ACTIONBARPTR+0x380+0x40*((roundCount[i]>>7)-14));
+        }
+        else
+        {
+          spr_pattern(ACTIONBARPTR+0x380+0x340);
+        }
       }
     }
+    roundCount[4] += DexN;
+    if(roundCount[4]>3520) next=4;
+
+    /*music_update();*/
+    satb_update();
+    vsync();
   }
-  roundCount[4] += DexN;
-  if(roundCount[4]>3520) next=4;
+  roundCount[next]=0;
 
-  /*music_update();*/
-  satb_update();
-  vsync();
-}
-roundCount[next]=0;
-
-return next;
+  return next;
 }
 /*
 for (i=0;i<4;i++)
@@ -843,10 +871,10 @@ return turn;
 /*            Round Init            */
 /************************************/
 RInit(DexN)
-unsigned int DexN;
+STAT_TYPE DexN;
 {
-char i;/*,j,Max;*/
-/*for(i=0;i<4;i++)
+  char i;/*,j,Max;*/
+  /*for(i=0;i<4;i++)
  {
   round[i]=5;
   if (HPp[i]>0) play[i]=1;
@@ -854,50 +882,50 @@ char i;/*,j,Max;*/
  round[4]=5;
  play[4]=1;
 
-*/
-for(i=0;i<4;i++)
-{
-  roundCount[i] = rand() % DexP[i];
-  spr_set(BARBASESPR+(i<<1));
-  spr_pri(1);
-  spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-  spr_pal(BARPAL);
-  spr_x(152);
-  spr_y(184+(i<<3));
-  if((roundCount[i]>>7)<14)
+   */
+  for(i=0;i<4;i++)
   {
-    spr_pattern(ACTIONBARPTR+0x40*(roundCount[i]>>7));
-  }
-  else
-  {
-    spr_pattern(ACTIONBARPTR+0x340);
-  }
-  spr_set(BARBASESPR+(i<<1)+1);
-  spr_pri(1);
-  spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-  spr_pal(BARPAL);
-  spr_x(168);
-  spr_y(184+(i<<3));
-  if((roundCount[i]>>7)<14)
-  {
-    spr_pattern(ACTIONBARPTR+0x380);
-  }
-  else
-  {
-    if(roundCount[i]<=3520)
+    roundCount[i] = rand() % DexP[i];
+    spr_set(BARBASESPR+(i<<1));
+    spr_pri(1);
+    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+    spr_pal(BARPAL);
+    spr_x(152);
+    spr_y(184+(i<<3));
+    if((roundCount[i]>>7)<14)
     {
-      spr_pattern(ACTIONBARPTR+0x380+0x40*((roundCount[i]>>7)-14));
+      spr_pattern(ACTIONBARPTR+0x40*(roundCount[i]>>7));
     }
     else
     {
-      spr_pattern(ACTIONBARPTR+0x380+0x340);
+      spr_pattern(ACTIONBARPTR+0x340);
     }
+    spr_set(BARBASESPR+(i<<1)+1);
+    spr_pri(1);
+    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+    spr_pal(BARPAL);
+    spr_x(168);
+    spr_y(184+(i<<3));
+    if((roundCount[i]>>7)<14)
+    {
+      spr_pattern(ACTIONBARPTR+0x380);
+    }
+    else
+    {
+      if(roundCount[i]<=3520)
+      {
+        spr_pattern(ACTIONBARPTR+0x380+0x40*((roundCount[i]>>7)-14));
+      }
+      else
+      {
+        spr_pattern(ACTIONBARPTR+0x380+0x340);
+      }
 
+    }
   }
-}
-roundCount[4] = rand() % DexN;
+  roundCount[4] = rand() % DexN;
 
-/*for(i=0;i<5;i++)
+  /*for(i=0;i<5;i++)
  {
   Max=0;
   for(j=0;j<4;j++)
@@ -911,144 +939,151 @@ roundCount[4] = rand() % DexN;
 /*             Player 1 battle system                */
 /*****************************************************/
 BattleP1(life_enemy,DefN,DexN,enemyres)
-unsigned int *life_enemy,DefN,DexN,enemyres;
+STAT_TYPE DefN,DexN;
+RESIST_TYPE enemyres;
+int *life_enemy;
 {
-unsigned char move,i;
-unsigned int wound, res;
-move=1;
+  unsigned char move,i;
+  unsigned int wound;
+  int res;
+  move=1;
 
-while(move)
- {
- /*music_update();*/
- fightframe((*life_enemy),0);
- spr_set(50);
- switch(battleselect())
+  while(move)
   {
-   case 1:
-    wound=fight(AtkP[0],DexP[0],DefN,DexN);
-    for(i=0;i<5;i++)
+    /*music_update();*/
+    fightframe((*life_enemy),0);
+    spr_set(50);
+    switch(battleselect())
     {
-      spr_x(spr_get_x()-1);
-      /*music_update();*/
-      satb_update();
-      vsync();
-    }
-    for(i=0;i<5;i++)
-    {
-      spr_x(spr_get_x()+1);
-      /*music_update();*/
-      satb_update();
-      vsync();
-    }
-    if (wound)
-     {
-      put_string(NamP1,2,1);
-      put_string("attacks",9,1);
-      (*life_enemy)-=wound;
-      damage(wound,40,80);
-     }
-      else
-       {
-	put_string(NamP1,2,1);
-	put_string("missed",9,1);
-       }
+      case 1:
+        wound=fight(AtkP[0],DexP[0],DefN,DexN);
+        for(i=0;i<5;i++)
+        {
+          spr_x(spr_get_x()-1);
+          /*music_update();*/
+          satb_update();
+          vsync();
+        }
+        for(i=0;i<5;i++)
+        {
+          spr_x(spr_get_x()+1);
+          /*music_update();*/
+          satb_update();
+          vsync();
+        }
+        if (wound)
+        {
+          put_string(NamP1,2,1);
+          put_string("attacks",9,1);
+          (*life_enemy)-=wound;
+          damage(wound,40,80);
+        }
+        else
+        {
+          put_string(NamP1,2,1);
+          put_string("missed",9,1);
+        }
 
-     move=0;
-     break;
+        move=0;
+        break;
 
-   case 2:
+      case 2:
 
-       res=*life_enemy;
-       Magicbattle(0,life_enemy,enemyres);
-       if (!(res==(*life_enemy)))
-	{
-        /*for(i=0;i<6;i++)
+        res=*life_enemy;
+        Magicbattle(0,life_enemy,enemyres);
+        if (!(res==(*life_enemy)))
+        {
+          /*for(i=0;i<6;i++)
 	  {
 	   if (i&0X1)
 	    { spr_pattern(0x5000); satb_update(); vsync(5);}
 	   else
 	    { spr_pattern(0x5040); satb_update(); vsync(2);}
 	  }*/
-	 /*Fireball(BattleX[0],BattleY[0],BattleX[4],BattleY[4]);*/
-	 put_string(NamP1,1,1);
-         put_string("used magic",8,1);
-         damage(res-(*life_enemy),40,80);
-	 move=0;}
-       break;
-   case 3:
-       Special(0);
-       break;
-   case 4:
-       if (Battleitem(0)) move=0;
-       break;
-   }
- }
+          /*Fireball(BattleX[0],BattleY[0],BattleX[4],BattleY[4]);*/
+          put_string(NamP1,1,1);
+          put_string("used magic",8,1);
+          damage(res-(*life_enemy),40,80);
+          move=0;}
+        break;
+      case 3:
+        Special(0);
+        break;
+      case 4:
+        if (Battleitem(0)) move=0;
+        break;
+    }
+  }
 }
 
 /***************************************************/
 /*            Player 2 battle system               */
 /***************************************************/
 BattleP2(life_enemy,DefN,DexN,enemyres)
-unsigned int *life_enemy,DefN,DexN,enemyres;
+STAT_TYPE DefN,DexN;
+RESIST_TYPE enemyres;
+int *life_enemy;
 {
-unsigned char move,i;
-unsigned int wound,res;
-move=1;
+  unsigned char move,i;
+  unsigned int wound;
+  int res;
+  
+  move=1;
 
-while(move)
- {
- /*music_update();*/
- fightframe((*life_enemy),1);
- spr_set(51);
- switch(battleselect())
+  while(move)
   {
-   case 1:
-    wound=fight(AtkP[1],DexP[1],DefN,DexN);
-    for(i=0;i<5;i++)
+    /*music_update();*/
+    fightframe((*life_enemy),1);
+    spr_set(51);
+    switch(battleselect())
     {
-      spr_x(spr_get_x()-1);
-      /*music_update();*/
-      satb_update();
-      vsync();
-    }
-    for(i=0;i<5;i++)
-    {
-      spr_x(spr_get_x()+1);
-      /*music_update();*/
-      satb_update();
-      vsync();
-    }
-    if (wound)
-     {
-      put_string(NamP2,2,1);
-      put_string("attacks",9,1);
-      damage(wound,40,80);
-      (*life_enemy)-=wound;
-     }
-      else
-       {
-	put_string(NamP2,2,1);
-	put_string("missed",9,1);
-       }
+      case 1:
+        wound=fight(AtkP[1],DexP[1],DefN,DexN);
+        for(i=0;i<5;i++)
+        {
+          spr_x(spr_get_x()-1);
+          /*music_update();*/
+          satb_update();
+          vsync();
+        }
+        for(i=0;i<5;i++)
+        {
+          spr_x(spr_get_x()+1);
+          /*music_update();*/
+          satb_update();
+          vsync();
+        }
+        if (wound)
+        {
+          put_string(NamP2,2,1);
+          put_string("attacks",9,1);
+          damage(wound,40,80);
+          (*life_enemy)-=wound;
+        }
+        else
+        {
+          put_string(NamP2,2,1);
+          put_string("missed",9,1);
+        }
 
-     move=0;
-     break;
+        move=0;
+        break;
 
-   case 2:
-       res=*life_enemy;
-       Magicbattle(1,life_enemy,enemyres);
+      case 2:
+        res=*life_enemy;
+        Magicbattle(1,life_enemy,enemyres);
 
-       if (res!=*life_enemy)
-	{
-	/*for(i=0;i<6;i++)
+        if (res!=*life_enemy)
+        {
+          /*for(i=0;i<6;i++)
 	{
 	  if (i&0X1)
            { spr_pattern(0x5000); satb_update(); vsync(5);}
           else
            { spr_pattern(0x5040); satb_update(); vsync(2);}
         }*/
-	/*Fireball(BattleX[1],BattleY[1],BattleX[4],BattleY[4]);*/
-         /*spr_set(MAGICSPR);
+          /*Fireball(BattleX[1],BattleY[1],BattleX[4],BattleY[4]);*/
+          /*spr_set(MAGICSPR);
          spr_show();
 	 for(i=BattleX[1];i>BattleX[4];i=i-2)
 	   {
@@ -1058,19 +1093,19 @@ while(move)
 	      vsync();
 	   }
  	 spr_hide();*/
-	 put_string(NamP2,1,1);
-         put_string("used magic",8,1);
-         damage(res-(*life_enemy),40,80);
-	 move=0;}
-       break;
-   case 3:
-       Special(1);
-       break;
-   case 4:
-       if (Battleitem(1)) move=0;
-       break;
-   }
- }
+          put_string(NamP2,1,1);
+          put_string("used magic",8,1);
+          damage(res-(*life_enemy),40,80);
+          move=0;}
+        break;
+      case 3:
+        Special(1);
+        break;
+      case 4:
+        if (Battleitem(1)) move=0;
+        break;
+    }
+  }
 }
 
 /********************************************/
@@ -1080,92 +1115,92 @@ damage(numbers,x,y)
 unsigned int numbers;
 char x,y;
 {
-unsigned char i,j,max;
+  unsigned char i,j,max;
 
-for(i=0;i<4;i++)
-{
-spr_set(10+i);
-spr_show();
-spr_pri(1);
-spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-spr_pal(NUMPAL);
-}
+  for(i=0;i<4;i++)
+  {
+    spr_set(10+i);
+    spr_show();
+    spr_pri(1);
+    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+    spr_pal(NUMPAL);
+  }
 
-if (numbers<0)
-{
- set_color(256+16*NUMPAL+1,0171);
- numbers=-numbers;
-}
-else
-{
- set_color(256+16*NUMPAL+1,0777);
-}
-max=4;
+  if (numbers<0)
+  {
+    set_color(256+16*NUMPAL+1,0171);
+    numbers=-numbers;
+  }
+  else
+  {
+    set_color(256+16*NUMPAL+1,0777);
+  }
+  max=4;
 
-if (numbers<1000)
- {
-  spr_set(10);
-  spr_hide();
-  max=3;
-  if (numbers<100)
-   {
-    spr_set(11);
+  if (numbers<1000)
+  {
+    spr_set(10);
     spr_hide();
-    max=2;
-    if (numbers<10)
-     {
-      spr_set(12);
+    max=3;
+    if (numbers<100)
+    {
+      spr_set(11);
       spr_hide();
-      max=1;
-     }
-   }
- }
-
-for(i=0;i<max;i++)
-{
- spr_set(13-i);
- spr_x(x+10-9*i);
- spr_y(y);
- spr_pattern(0x5500+0x40*(numbers%10));
- numbers/=10;
-}
-
-
-
-for(j=0;j<4;j++)
-{
- for(i=0;i<max;i++)
-  {
-   spr_set(13-i);
-   spr_y(spr_get_y()-1);
-   /*music_update();*/
-   satb_update();
-   vsync();
+      max=2;
+      if (numbers<10)
+      {
+        spr_set(12);
+        spr_hide();
+        max=1;
+      }
+    }
   }
-}
 
-for(j=0;j<10;j++)
-{ for(i=0;i<max;i++)
+  for(i=0;i<max;i++)
   {
-   spr_set(13-i);
-   spr_y(spr_get_y()+1);
-   /*music_update();*/
-   satb_update();
-   vsync();
+    spr_set(13-i);
+    spr_x(x+10-9*i);
+    spr_y(y);
+    spr_pattern(0x5500+0x40*(numbers%10));
+    numbers/=10;
   }
-}
 
-for(i=0;i<30;i++)
-{
-  /*music_update();*/
-  vsync(1);
-}
-for(i=0;i<4;i++)
-{
- spr_set(10+i);
- spr_hide();
-}
-satb_update();
+
+
+  for(j=0;j<4;j++)
+  {
+    for(i=0;i<max;i++)
+    {
+      spr_set(13-i);
+      spr_y(spr_get_y()-1);
+      /*music_update();*/
+      satb_update();
+      vsync();
+    }
+  }
+
+  for(j=0;j<10;j++)
+  { for(i=0;i<max;i++)
+  {
+    spr_set(13-i);
+    spr_y(spr_get_y()+1);
+    /*music_update();*/
+    satb_update();
+    vsync();
+  }
+  }
+
+  for(i=0;i<30;i++)
+  {
+    /*music_update();*/
+    vsync(1);
+  }
+  for(i=0;i<4;i++)
+  {
+    spr_set(10+i);
+    spr_hide();
+  }
+  satb_update();
 
 }
 

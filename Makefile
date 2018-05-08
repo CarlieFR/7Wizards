@@ -28,7 +28,6 @@ clean :
 TestMelancholia.asm : TestMelancholia.mod
 	mod2mml -o $@ $<
 
-#mod2mml -o $@ $<
 # -d 11=4,12=3,13=1,15=2 -a -n -v 3=28,1=28 -f 3=.25
 
 Merry.asm : Merry.mod
