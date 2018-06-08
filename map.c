@@ -80,7 +80,7 @@ const int move_in_1[14] =
   MOVE_COL01 + MOVE_COL16,
   MOVE_LINE};
   
-const int event_in_1[8]={
+const unsigned int event_in_1[8]={
 	4+15*256, TELEPORT_EVT, 2, 4+0*256,
 	8+5*256, BATTLE_EVT, 0, 0};
   
@@ -103,8 +103,13 @@ monsters_in_map = no_monster_in_map;
 nb_monsters = 0;
 map_battle_bg = PLAIN_BG;
  
- if (currentMusic != 1) {
-   music1Init();
+  if (currentMusic != 1) {
+    currentMusic = 1;
+    st_set_song(bank(Merry), Merry);
+    st_reset();
+
+    st_play_song();
+   /*music1Init();*/
  }
  
 }
@@ -156,7 +161,7 @@ const int move_in_2[14] =
   MOVE_COL01 + MOVE_COL16,
   MOVE_COL01 + MOVE_COL16};
   
-const int event_in_2[60]={
+const unsigned int event_in_2[60]={
 	4+0*256, TELEPORT_EVT, 1, 4+15*256,
 	13+1*256, TELEPORT_EVT, 3, 0+1*256,
   13+2*256, TELEPORT_EVT, 3, 0+2*256,
@@ -195,8 +200,12 @@ event_in_map = event_in_2;
  
  map_battle_bg = PLAIN_BG;
 
- if (currentMusic != 1) {
-   music1Init();
+  if (currentMusic != 1) {
+    currentMusic = 1;
+    st_set_song(bank(Merry), Merry);
+    st_reset();
+
+    st_play_song();
  }
 
 
@@ -249,7 +258,7 @@ const int move_in_3[14] =
   MOVE_COL01 + MOVE_COL16,
   0xf + MOVE_COL05 + MOVE_COL06 + MOVE_COL07 + MOVE_COL10 + MOVE_COL11 + MOVE_COL12 + 0xf000};
 
-const int event_in_3[72]={
+const unsigned int event_in_3[72]={
 	13+7*256, TELEPORT_EVT, 4, 0+7*256,
   13+8*256, TELEPORT_EVT, 4, 0+8*256,
 	0+1*256, TELEPORT_EVT, 2, 13+1*256,
@@ -292,8 +301,13 @@ event_in_map = event_in_3;
  
  map_battle_bg = PLAIN_BG;
 
- if (currentMusic != 1) {
-   music1Init();
+  if (currentMusic != 1) {
+    currentMusic = 1;
+    st_set_song(bank(Merry), Merry);
+    st_reset();
+
+    st_play_song();
+   /*music1Init();*/
  }
 }
 
@@ -351,7 +365,7 @@ const int move_in_4[14] =
   MOVE_COL01 + MOVE_COL16,
   MOVE_LINE};
   
-const int event_in_4[20]={
+const unsigned int event_in_4[20]={
 	0+7*256, TELEPORT_EVT, 3, 13+7*256,
   0+8*256, TELEPORT_EVT, 3, 13+8*256,
   5+4*256, TELEPORT_EVT, 20000, 11+8*256,
@@ -378,7 +392,7 @@ event_in_map = event_in_4;
  map_battle_bg = PAVE_CITY_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   /*music1Init();*/
  }
 }
 
@@ -444,7 +458,7 @@ const int move_in_house1[14] =
   MOVE_LINE,
   MOVE_LINE};
   
-const int event_in_house1[4]={
+const unsigned int event_in_house1[4]={
 	11+8*256, TELEPORT_EVT, 4, 5+4*256};
   
 housemap1()
@@ -467,6 +481,11 @@ event_in_map = event_in_house1;
  map_battle_bg = PAVE_CITY_BG;
 
  if (currentMusic != 1) {
-   music1Init();
+   currentMusic = 1;
+    st_set_song(bank(Merry), Merry);
+    st_reset();
+
+    st_play_song();
+   /*music1Init();*/
  }
 }

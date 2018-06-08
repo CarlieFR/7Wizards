@@ -1,11 +1,27 @@
+/* Overlay values */
 #define OVL_INIT 1
 #define OVL_RPG 2
 #define OVL_BATTLE 3
 
+/* Coding */
 #define NULL 0
 
+/* attribute types */
+#define STAT_TYPE unsigned char
+#define HP_TYPE int
+#define MP_TYPE unsigned int
+#define RESIST_TYPE unsigned int
+#define MAX_HPMP_TYPE unsigned int
+
+/* game values */
 #define LIFEMAX 500
 #define MPMAX 30
+#define DEX 40
+#define ATK 50
+#define DEF 50
+#define COUNTMAX 6
+
+/* graph values */
 #define TITLEPCX "title.pcx"
 #define SPRITE "sprite1.pcx"
 #define PERSO1PCX "perso1.pcx"
@@ -25,10 +41,6 @@
 #define ICE_MAGICPAL 5
 #define BARPAL 8
 #define TILE_PAL 12
-#define DEX 40
-#define ATK 50
-#define DEF 50
-#define COUNTMAX 6
 #define MAGICSPR 30
 #define Ram_tiles 0X1200
 #define FIREMAGICPTR 0x7000
@@ -88,15 +100,15 @@
 /**
  * Pattern à afficher en fonction de la direction
  */
-#define FR_Face 0x5200
-#define BK_Face 0x52C0
-#define RGT_Face 0x5380
-#define LFT_Face 0x5440
+#define FR_Face PLAYER1PTR
+#define BK_Face FR_Face+0xC0
+#define RGT_Face BK_Face+0xC0
+#define LFT_Face RGT_Face+0xC0
 
 /**
  * Définition des id de tile
  */
-const char tiles_pal_ref[250];
+const unsigned char tiles_pal_ref[250];
 
 #define Hill 0X12b6
 #define T_Hill 107
@@ -294,15 +306,15 @@ const char* itemdesc[11] =
   * target est le tableau cible
   * length la taille à copier
   */
- array_copy(source, target, length)
- int *source, *target;
- char length;
+ /*array_copy(source, target, length)
+ unsigned int *source, *target;
+ unsigned char length;
  {
-	 char i;
+	 unsigned char i;
 	 for (i=0; i<length; i++) {
 		 target[i] = source[i];
 	 }
- }
+ }*/
  
 #define continue_indicator "<.>"
 #define end_indicator "<X>"

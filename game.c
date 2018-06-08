@@ -1,9 +1,12 @@
+#incasm("Merry.asm")
+extern struct st_header Merry[];
+
 /************************************************/
 /*               Game Program                   */
 /************************************************/
 game()
 {
-char i;
+unsigned char i;
 
   if(gameState==0) {
     vsync(20);
@@ -41,9 +44,10 @@ char i;
   set_tile_data(tilesgfx, 250, tiles_pal_ref);
   load_tile(Ram_tiles);
 
+  st_reset();
+  
 while (1)
 {
-  silence();
   
  switch (pos)
  {
@@ -52,6 +56,7 @@ while (1)
     menu();
     spr_show();
     pos=oldpos;
+    vsync(1);
     break;
  default:
     teleport(oldpos);

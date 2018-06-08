@@ -52,3 +52,6 @@ Temporary Items
 *.lst
 *.ovl
 *.iso
+*.asm
+.project
+mod2mml.log

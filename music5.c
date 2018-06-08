@@ -78,7 +78,7 @@ const int music5TrackLength5[]={0};
 
 music5Init()
 {
-Mus_Length=560;
+/*Mus_Length=560;
 Mus_Repeat=0;
 Track0=music5Track0;
 TrackLength0=music5TrackLength0;
@@ -99,5 +99,5 @@ initchannelsquare(1);
 initchannelsine(2);
 initchannelsquare(3);
 initchannelnoise(4);
-initchannelnoise(5);
+initchannelnoise(5);*/
 }

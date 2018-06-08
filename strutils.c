@@ -41,18 +41,19 @@ int number;
  * Renvoi un pointeur vers la chaine de caractères, à copier après après avant de faire un nouvel appel.
  */
 int_to_str(number)
-int number;
+unsigned int number;
 {
   char result[6];
   char i,index;
-  int limit;
+  unsigned int limit;
   
   index = 0;
+  limit = 10000;
   for (i=5; i>0; i--) {
-    limit = 10^i;
+    limit = limit/10;
     if (number > limit) {
       /* On ajoute le chiffre du nombre le plus à gauche */
-      result[index++] = digit_as_str((number/limit)%10);
+      result[index++] = digit_as_str((number / limit) %10);
     }
   }
   result[index] = NULL;

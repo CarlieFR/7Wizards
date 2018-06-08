@@ -50,7 +50,9 @@ const char plain_bg[] = {
      T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain};
 
 init_graph() {
-  char i;
+  unsigned char i;
+  
+  set_screen_size(SCR_SIZE_32x32);
   
   load_sprites(FIREMAGICPTR,fire_magicgfx,2);
   load_sprites(ICEMAGICPTR,ice_magicgfx,2);
@@ -74,7 +76,8 @@ init_graph() {
 /*           Fight low frame                 */
 /*********************************************/
 fightframe(life_enemy,turn)
-int life_enemy,turn;
+unsigned int life_enemy;
+char turn;
 {
 char i;
 

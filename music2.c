@@ -225,7 +225,7 @@ const int music2TrackLength5[]={0};
 
 music2Init()
 {
-Mus_Length=1257;
+/*Mus_Length=1257;
 Mus_Repeat=0;
 Track0=music2Track0;
 TrackLength0=music2TrackLength0;
@@ -246,5 +246,5 @@ initchannelsine(1);
 initchannelsine(2);
 initchannelsquare(3);
 initchannelnoise(4);
-initchannelnoise(5);
+initchannelnoise(5);*/
 }
