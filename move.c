@@ -265,14 +265,8 @@ manage_move() {
   
   if (direction != 0 && nb_monsters > 0) {
     if ((rand() % 400) < (monster / 20)) {
-      spr_hide();
       
-      monsterID=1;
-      battle_bg=map_battle_bg;
-      /*monster=0;*/
-      
-      /*battle();*/
-      cd_execoverlay(OVL_BATTLE);
+      do_battle_event(1, map_battle_bg);
 
       /*spr_show();
       spr_x(spriteX);
@@ -389,9 +383,9 @@ manage_events() {
 }
 
 check_event(event_pos)
-int event_pos;
+unsigned int event_pos;
 {
-  char i;
+  unsigned char i;
   
   for(i=0; i<nb_events; i++) {
     if (event_in_map[i*4] == event_pos) {
@@ -402,7 +396,7 @@ int event_pos;
 }
 
 do_event(type, arg1, arg2) 
-int type, arg1, arg2;
+unsigned int type, arg1, arg2;
 {
   switch(type) {
     case TELEPORT_EVT :
@@ -432,7 +426,7 @@ int type, arg1, arg2;
  * mapId : int : id of the destination map
  */
 teleport(mapId)
-int mapId;
+unsigned int mapId;
 {
   oldpos = mapId;
   monster=0;
@@ -457,7 +451,7 @@ int mapId;
 }
 
 do_special_event(arg1, arg2)
-int arg1, arg2;
+unsigned int arg1, arg2;
 {
   switch(oldpos) {
     case 1:
@@ -483,16 +477,17 @@ int arg1, arg2;
  * map_bg_id : id of the battle background map
  */
 do_battle_event(monstreID, map_bg_id)
-int monstreID, map_bg_id;
+unsigned int monstreID, map_bg_id;
 {
+  silence();
   spr_hide();
       
-      monsterID=monstreID;
-      battle_bg=map_bg_id;
-      /*monster=0;*/
+  monsterID=monstreID;
+  battle_bg=map_bg_id;
+  /*monster=0;*/
       
-      /*battle();*/
-      cd_execoverlay(OVL_BATTLE);
+  /*battle();*/
+  cd_execoverlay(OVL_BATTLE);
 }
 
 

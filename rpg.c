@@ -11,8 +11,8 @@
 #include "text.c"
 #include "silence.c"
 
-#incasm("Merry.asm")
-extern struct st_header Merry[];
+#incasm("TestMelancholia.asm")
+extern struct st_header TestMelancholia[];
 
 #include "graph.c"
 
@@ -46,7 +46,7 @@ main()
       ExpP[1]=10;
       select=0;
       /* Music initialisation*/
-      st_set_song(bank(Merry), Merry);
+      st_set_song(bank(TestMelancholia), TestMelancholia);
 
       st_reset();
 
@@ -69,6 +69,7 @@ main()
       put_char('-',9,18);
 
       /*st_reset();*/
+      st_song_repeat_on();
       st_play_song();
 
       while (!(joytrg(0) & (JOY_STRT | JOY_A | JOY_B)))

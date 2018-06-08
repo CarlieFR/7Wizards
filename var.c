@@ -59,8 +59,8 @@ unsigned char nb_monsters;
  * Utilisation d'une variable séparée pour indiquer le background pour la map.
  * Cela permet de séparer le background d'une map de celui d'un event spécifique.
  */
-unsigned char battle_bg;
-unsigned char map_battle_bg;
+unsigned int battle_bg;
+unsigned int map_battle_bg;
 
 /**
  * Indicateur de la musique actuellement jouée.

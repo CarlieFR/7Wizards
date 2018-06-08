@@ -18,8 +18,8 @@
 /********************************/
 #include "graphbattle.c"
 
-#incasm("TestMelancholia.asm")
-extern struct st_header TestMelancholia[];
+#incasm("TestFight.asm")
+extern struct st_header TestFight[];
 
 /****************************************/
 /*          Battle System               */
@@ -43,10 +43,11 @@ main()
 
   /*silence();*/
   /*music4Init();*/
-  st_set_song(bank(TestMelancholia), TestMelancholia);
+  st_set_song(bank(TestFight), TestFight);
   /*st_reset();*/
   st_reset();
 
+  st_song_repeat_on();
   st_play_song();
 
   set_font_color(1,2);
@@ -232,7 +233,10 @@ main()
             if (HPp[target]<0) HPp[target]=0;
           }
           else
-            put_string("He missed",5,1);
+            blank(1,1,30,1);
+            satb_update();
+            vsync(1);
+            put_string("He missed",3,1);
 
           /*turn=STurn(turn);*/
           break;
