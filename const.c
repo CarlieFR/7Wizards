@@ -231,7 +231,7 @@ const unsigned char tiles_pal_ref[250];
  * Autres constantes
  */
 
-const char* magicname[10] =
+const char* c_magicname[10] =
 {"Fire",
  "Ice",
  "Bolt",
@@ -243,7 +243,7 @@ const char* magicname[10] =
  "Meteo",
  "Ultima"};
 
-const int magicelement[10] =
+const int c_magicelement[10] =
 {0xf,
  0xf0,
  0xf00,
@@ -255,7 +255,7 @@ const int magicelement[10] =
  0,
  0};
 
-const char* magicdesc[10] =
+const char* c_magicdesc[10] =
 {"Burn enemy with fire",
  "Freeze enemy with ice",
  "Cast bolt on enemy",
@@ -267,10 +267,10 @@ const char* magicdesc[10] =
  "Ancient spell",
  "Ultimate magic spell"};
 
-const char magicmp[10] =
+const char c_magicmp[10] =
 {3,4,5,7,9,10,15,20,30,50};
 
-const char* item[11] =
+const char* c_item[11] =
 {"Potion",
  "HyperPotion",
  "Ether",
@@ -283,7 +283,7 @@ const char* item[11] =
  "",
  ""};
 
-const char* itemdesc[11] =
+const char* c_itemdesc[11] =
 {"Restore 50 HP",
  "Restore 250 HP",
  "Restore 10 MP",

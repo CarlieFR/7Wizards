@@ -6,9 +6,9 @@ unsigned int enemyres;
   int factor;
   factor=0;
 
-  if (MPp[player]>=magicmp[spell])
+  if (g_mp[player]>=c_magicmp[spell])
   {/*if*/
-    switch(magicelement[spell])
+    switch(c_magicelement[spell])
     {/*switch*/
       case 0:
       {/*case 0*/
@@ -138,8 +138,8 @@ unsigned int enemyres;
         break;
       }
     }/*end switch*/
-    MPp[player]-=magicmp[spell];
-    return factor*magicmp[spell]*MaxMP[player]/4;
+    g_mp[player]-=c_magicmp[spell];
+    return factor*c_magicmp[spell]*g_maxMP[player]/4;
     
   }/*end if*/
 

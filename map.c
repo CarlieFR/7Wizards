@@ -94,22 +94,21 @@ cls();
 set_map_data(tiles_map1, 16,14);
 load_map(0,0, 0,0, 16,14);
  
-move_in_map = move_in_1;
+g_move_in_map = move_in_1;
  
-event_in_map = event_in_1;
-nb_events = 2;
+g_event_in_map = event_in_1;
+g_nb_events = 2;
  
-monsters_in_map = no_monster_in_map;
-nb_monsters = 0;
-map_battle_bg = PLAIN_BG;
+g_monsters_in_map = no_monster_in_map;
+g_nb_monsters = 0;
+g_map_battle_bg = PLAIN_BG;
  
-  if (currentMusic != 1) {
-    currentMusic = 1;
+  if (g_currentMusic != 1) {
+    g_currentMusic = 1;
     st_set_song(bank(Merry), Merry);
     st_reset();
 
     st_play_song();
-   /*music1Init();*/
  }
  
 }
@@ -183,25 +182,23 @@ const int monsters_in_map2[1] = { 1 };
 map2()
 {
 
-/*vsync();*/
 cls();
 
-/*print_map(map_in_2);*/
 set_map_data(tiles_map2, 16,14);
  load_map(0,0, 0,0, 16,14);
 
-move_in_map = move_in_2;
+g_move_in_map = move_in_2;
 
-event_in_map = event_in_2;
- nb_events = 15;
+g_event_in_map = event_in_2;
+ g_nb_events = 15;
  
- monsters_in_map = monsters_in_map2;
- nb_monsters = 1;
+ g_monsters_in_map = monsters_in_map2;
+ g_nb_monsters = 1;
  
- map_battle_bg = PLAIN_BG;
+ g_map_battle_bg = PLAIN_BG;
 
-  if (currentMusic != 1) {
-    currentMusic = 1;
+  if (g_currentMusic != 1) {
+    g_currentMusic = 1;
     st_set_song(bank(Merry), Merry);
     st_reset();
 
@@ -281,33 +278,27 @@ const unsigned int event_in_3[72]={
 map3()
 {
 
-/*vsync();*/
 cls();
-
-/*load_sprites(Ram_tiles,tilesgfx,1);
-set_bgpal(1,tilespal);*/
 
   set_map_data(tiles_map3, 16,14);
   load_map(0,0, 0,0, 16,14);
 
-move_in_map = move_in_3;
-/*array_copy(move_in_3, move_in_map, 14);*/
+g_move_in_map = move_in_3;
 
-event_in_map = event_in_3;
- nb_events = 18;
+g_event_in_map = event_in_3;
+ g_nb_events = 18;
  
- monsters_in_map = no_monster_in_map;
- nb_monsters = 0;
+ g_monsters_in_map = no_monster_in_map;
+ g_nb_monsters = 0;
  
- map_battle_bg = PLAIN_BG;
+ g_map_battle_bg = PLAIN_BG;
 
-  if (currentMusic != 1) {
-    currentMusic = 1;
+  if (g_currentMusic != 1) {
+    g_currentMusic = 1;
     st_set_song(bank(Merry), Merry);
     st_reset();
 
     st_play_song();
-   /*music1Init();*/
  }
 }
 
@@ -375,31 +366,34 @@ const unsigned int event_in_4[20]={
 map4()
 {
   
-  /*vsync();*/
 cls();
-/*print_map(map_in_4);*/
+
   set_map_data(tiles_map4, 16,14);
  load_map(0,0, 0,0, 16,14);
 
-move_in_map = move_in_4;
+g_move_in_map = move_in_4;
 
-event_in_map = event_in_4;
- nb_events = 5;
+g_event_in_map = event_in_4;
+ g_nb_events = 5;
  
- monsters_in_map = no_monster_in_map;
- nb_monsters = 0;
+ g_monsters_in_map = no_monster_in_map;
+ g_nb_monsters = 0;
  
- map_battle_bg = PAVE_CITY_BG;
+ g_map_battle_bg = PAVE_CITY_BG;
 
- if (currentMusic != 1) {
-   /*music1Init();*/
+ if (g_currentMusic != 1) {
+   g_currentMusic = 1;
+    st_set_song(bank(Merry), Merry);
+    st_reset();
+
+    st_play_song();
  }
 }
 
 event_map4()
 {
-  if (first_time_map4) {
-    first_time_map4 = 0;
+  if (g_first_time_map4) {
+    g_first_time_map4 = 0;
     vsync();
     welcome_town1();
     map4();
@@ -463,29 +457,24 @@ const unsigned int event_in_house1[4]={
   
 housemap1()
 {
-/*char i,j;*/
-
-/*print_map(map_in_house1);*/
   set_map_data(tiles_house1, 16,14);
   load_map(0,0, 0,0, 16,14);
 
-move_in_map = move_in_house1;
-/*array_copy(move_in_house1, move_in_map, 14);*/
+g_move_in_map = move_in_house1;
 
-event_in_map = event_in_house1;
- nb_events = 1;
+g_event_in_map = event_in_house1;
+ g_nb_events = 1;
  
- monsters_in_map = no_monster_in_map;
- nb_monsters = 0;
+ g_monsters_in_map = no_monster_in_map;
+ g_nb_monsters = 0;
  
- map_battle_bg = PAVE_CITY_BG;
+ g_map_battle_bg = PAVE_CITY_BG;
 
- if (currentMusic != 1) {
-   currentMusic = 1;
+ if (g_currentMusic != 1) {
+   g_currentMusic = 1;
     st_set_song(bank(Merry), Merry);
     st_reset();
 
     st_play_song();
-   /*music1Init();*/
  }
 }

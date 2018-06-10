@@ -8,13 +8,13 @@ char item,target;
 switch(item)
   {
    case 0:
-    HPp[target]+=50;
-    if (HPp[target]>MaxHP[target]) HPp[target]=MaxHP[target];
+    g_hp[target]+=50;
+    if (g_hp[target]>g_maxHP[target]) g_hp[target]=g_maxHP[target];
     break;
 
    case 1:
-    HPp[target]+=250;
-    if (HPp[target]>MaxHP[target]) HPp[target]=MaxHP[target];
+    g_hp[target]+=250;
+    if (g_hp[target]>g_maxHP[target]) g_hp[target]=g_maxHP[target];
     break;
   }
 }

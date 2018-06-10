@@ -8,23 +8,23 @@ game()
 {
 unsigned char i;
 
-  if(gameState==0) {
+  if(g_gameState==0) {
     vsync(20);
     intro();
 
-    pos=1;
+    g_pos=1;
 
-    spriteX=16;
-    spriteY=16;
+    g_spriteX=16;
+    g_spriteY=16;
 
 
     spr_set(0);
     spr_pri(1);
     spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
     spr_pal(0);
-    spr_x(spriteX);
-    spr_y(spriteY);
-    gameState=1;
+    spr_x(g_spriteX);
+    spr_y(g_spriteY);
+    g_gameState=1;
     
     /*load_sprites(Ram_tiles,tilesgfx,16);*/
     /*set_bgpal(1,tilespal);*/
@@ -34,7 +34,7 @@ unsigned char i;
     SPRPATTERN=FR_Face;
     spr_pattern(SPRPATTERN);*/
     /*map1();*/
-    oldpos=1;
+    g_oldpos=1;
   }
   
   load_palette(TILE_PAL, tilespal, 1);
@@ -49,37 +49,19 @@ unsigned char i;
 while (1)
 {
   
- switch (pos)
+ switch (g_pos)
  {
  case -1:
     spr_hide();
     menu();
     spr_show();
-    pos=oldpos;
+    g_pos=g_oldpos;
     vsync(1);
     break;
  default:
-    teleport(oldpos);
-    pos = move();
+    teleport(g_oldpos);
+    g_pos = move();
     break;
- /*case 2:
-    oldpos=2; 
-    pos=move();
-    break;
- case 3:
-    oldpos=3;
-    pos=move();
-    break;
- case 4:
-    oldpos=4;
-    silence();
-    pos=move();
-    break;
- case 20000:
-    oldpos=20000;
-    silence();
-    pos=move();
-    break;*/
  }
 }
 
@@ -152,9 +134,9 @@ border(0,25,32,3);
 
 for(select=0;select<11;select++)
 {
-put_string(item[select],3,2+select*2);
+put_string(c_item[select],3,2+select*2);
 put_char(':',15,2+select*2);
-put_number(itemnb[select],2,17,2+select*2);
+put_number(g_itemnb[select],2,17,2+select*2);
 }
 select=0;
 put_char('>',1,2);
@@ -163,7 +145,7 @@ vsync();
 while (!(joytrg(0) & (JOY_STRT | JOY_B)))
 {
  blank(1,26,30,1);
- put_string(itemdesc[select],1,26);
+ put_string(c_itemdesc[select],1,26);
  if ((joytrg(0) & JOY_DOWN) && (select<10))
    {
     put_char(' ',1,2+2*select);
@@ -176,15 +158,15 @@ while (!(joytrg(0) & (JOY_STRT | JOY_B)))
     select--;
     put_char('>',1,2+2*select);
    }
- if ((joytrg(0) & JOY_A) && (itemnb[select]>0))
+ if ((joytrg(0) & JOY_A) && (g_itemnb[select]>0))
  {
-  itemnb[select]--;
+  g_itemnb[select]--;
   cls();
   border(0,0,32,28);
   GlobalStatus();
   vsync();
   player=SelectP();
-  put_number(itemnb[select],2,17,2+select*2);
+  put_number(g_itemnb[select],2,17,2+select*2);
   itemeffect(select,player);
   }
  vsync();
@@ -225,14 +207,14 @@ if (joytrg(0) & JOY_LEFT)
 if (joytrg(0) & JOY_A)
 {
 for(select=0;select<10;select++)
- {put_string(magicname[select],3,4+2*select);}
+ {put_string(c_magicname[select],3,4+2*select);}
 select=0;
 
 while(!(joytrg(0) & (JOY_STRT | JOY_B)))
  {
-  put_number(magicmp[select],2,29,1);
+  put_number(c_magicmp[select],2,29,1);
   blank(1,26,30,1);
-  put_string(magicdesc[select],1,26);
+  put_string(c_magicdesc[select],1,26);
   put_char('>',1,select*2+4);
   if ((joytrg(0) & JOY_DOWN) && (select<9))
     {
@@ -321,16 +303,16 @@ if ((joytrg(0) & JOY_RGHT) && (i<3))
  }
 switch(i)
 {
-case 0: put_string(NamP1,13,2); break;
-case 1: put_string(NamP2,13,2); break;
-case 2: put_string(NamP3,13,2); break;
-case 3: put_string(NamP4,13,2); break;
+case 0: put_string(g_nameP1,13,2); break;
+case 1: put_string(g_nameP2,13,2); break;
+case 2: put_string(g_nameP3,13,2); break;
+case 3: put_string(g_nameP4,13,2); break;
 }
 put_number(1,2,17,4);
-put_number(AtkP[i],3,16,6);
-put_number(DefP[i],3,16,8);
-put_number(DexP[i],3,16,10);
-put_number(ExpP[i],4,15,12);
+put_number(g_atkP[i],3,16,6);
+put_number(g_defP[i],3,16,8);
+put_number(g_dexP[i],3,16,10);
+put_number(g_expP[i],4,15,12);
 vsync();
 }
 }
@@ -341,21 +323,21 @@ GlobalStatus()
 {
 char i;
 
- put_string(NamP1,2,2);
- put_string(NamP2,2,8);
- put_string(NamP3,2,14);
- put_string(NamP4,2,20);
+ put_string(g_nameP1,2,2);
+ put_string(g_nameP2,2,8);
+ put_string(g_nameP3,2,14);
+ put_string(g_nameP4,2,20);
 
  for(i=0;i<4;i++)
  {
  put_string("HP :",4,4+i*6);
  put_string("MP :",4,6+i*6);
- put_number(HPp[i],4,9,4+i*6);
- put_number(MPp[i],4,9,6+i*6);
+ put_number(g_hp[i],4,9,4+i*6);
+ put_number(g_mp[i],4,9,6+i*6);
  put_char('/',13,4+i*6);
  put_char('/',13,6+i*6);
- put_number(MaxHP[i],4,14,4+i*6);
- put_number(MaxMP[i],4,14,6+i*6);
+ put_number(g_maxHP[i],4,14,4+i*6);
+ put_number(g_maxMP[i],4,14,6+i*6);
  }
 
 }

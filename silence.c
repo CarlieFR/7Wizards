@@ -6,5 +6,5 @@ silence()
   irq_disable_user(IRQ_VSYNC);
 
   
-  currentMusic = 0;
+  g_currentMusic = 0;
 }

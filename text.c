@@ -13,7 +13,7 @@ strcat(text_buffer, "\nMost of the remaining magic caster have turned into sage 
 strcat(text_buffer, "\nHowever, a few of them decided to use their unique abilities for greed and power.\n");
 strcat(text_buffer, "\nHere are {0} and {1}, two young friends travelling back home after hunting for some food.");
 
-print_text2(text_buffer, 1, 1, 13, NamP1, NamP2);
+print_text2(text_buffer, 1, 1, 13, g_nameP1, g_nameP2);
 
 }
 
@@ -46,7 +46,7 @@ welcome_town1()
   text_buffer[0] = NULL;
   strcat(text_buffer, "You can see the elder coming toward you :\n");
   strcat(text_buffer, "Welcome back {0} !\nHow was your hunt?");
-  print_text1(text_buffer, 1, 1, 4, NamP1);
+  print_text1(text_buffer, 1, 1, 4, g_nameP1);
   
   spr_show();
 }

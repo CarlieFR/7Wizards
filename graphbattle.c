@@ -83,14 +83,14 @@ char i;
 
  blank(1,23,30,4);
  border(10,22,22,6);
- put_string(NamP1,12,23);
- put_string(NamP2,12,24);
- put_string(NamP3,12,25);
- put_string(NamP4,12,26);
+ put_string(g_nameP1,12,23);
+ put_string(g_nameP2,12,24);
+ put_string(g_nameP3,12,25);
+ put_string(g_nameP4,12,26);
  put_string("Enemy",12,21);
  for(i=0;i<4;i++)
  {
-   put_number(HPp[i],5,25,23+i);
+   put_number(g_hp[i],5,25,23+i);
    /*spr_set(BARBASESPR+2*i);
    spr_show();
    spr_set(BARBASESPR+2*i+1);
@@ -108,7 +108,7 @@ battlescreen()
 {
   cls();
   
-  switch(battle_bg) {
+  switch(g_battle_bg) {
     case PLAIN_BG :
       set_map_data(plain_bg, 16,11);
       break;
