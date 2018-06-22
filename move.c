@@ -1,76 +1,70 @@
 
-MAX(x,y)
+/*MAX(x,y)
 int x,y;
 {
 	return x>y?x:y;
-}
+}*/
 
 /***************************************/
 /*   test function for left movement   */
 /***************************************/
-moveltest()
+move_leftTest()
 {
-int column;
-char row;
+unsigned int l_column;
+unsigned char l_row;
 
   if (g_spriteX <= 0) {
-    /* Si on est au bord à gauche, on évite de sortir */
+    /* Prevent out of bound moving */
     return;
   }
 
   if (g_spriteX & 0xf) {
-	  /* En milieu de case, on passe */
-	  go_left();
+	  /* Currently moving on a tile, no need to check next tile */
+	  move_doGoLeft();
   } else {
-	 /* En bout de case
-	  * On calcule la colonne actuelle (pour mask) */
-	 column = 1 << ((g_spriteX>>4)-1);
-	 /*column = 1;
-	 for (colNumber =0 ; colNumber < spriteX/16 -1; colNumber++) {
-		 column = column *2;
-	 }*/
-	 /* On fait un décalage pour tester la colonne à gauche. */
-	 /*column = column >> 1;*/
-	 /* on calcul la ligne courante, à partir de la position en Y divisé par 16 */
-	 row = g_spriteY>>4;
-	 /* On test si on est aligné verticalement */
-     if (g_spriteY & 0xf) {
-		 /* Non aligné, il faut vérifier les cases au dessus/au dessous */
-		 if (((g_move_in_map[row] & column ) == 0) &&
-			 ((g_move_in_map[row+1] & column ) == 0)) {
-				 /* 1 : déplacement OK */
-				 go_left();
+	  /* En bout de case
+	   * On calcule la colonne actuelle (pour mask) */
+	  l_column = 1 << ((g_spriteX>>4)-1);
+	  /* on calcul la ligne courante, à partir de la position en Y divisé par 16 */
+	  l_row = g_spriteY>>4;
+	  /* On test si on est aligné verticalement */
+    if (g_spriteY & 0xf) {
+		  /* Non aligné, il faut vérifier les cases au dessus/au dessous */
+		  if (((g_move_in_map[l_row] & l_column ) == 0) &&
+			 ((g_move_in_map[l_row+1] & l_column ) == 0)) {
+				 /* both tile ok to move, go left */
+				 move_doGoLeft();
 				 return;
-		 } else {
-			 if (((g_move_in_map[row] & column ) != 0) &&
-				((g_move_in_map[row+1] & column ) == 0)) {
-					/* 3 : Décalage vers le bas */
-					go_down();
+		  } else {
+			  if (((g_move_in_map[l_row] & l_column ) != 0) &&
+		      ((g_move_in_map[l_row+1] & l_column ) == 0)) {
+					/* lower tile ok to move, but go down first */
+					move_doGoDown();
 					return;
-			 } else {
-				 if (((g_move_in_map[row] & column ) == 0) &&
-					((g_move_in_map[row+1] & column ) != 0)) {
-						/* 2 : Décalage vers le haut */
-						go_up();
+			  } else {
+				  if (((g_move_in_map[l_row] & l_column ) == 0) &&
+					 ((g_move_in_map[l_row+1] & l_column ) != 0)) {
+						/* upper tile ok to move, but go up first */
+						move_doGoUp();
 						return;
-				}
-			 }
-		 }
-	} else {
-		/* Aligné, on vérifie juste la case à gauche */
-		if ((g_move_in_map[row] & column ) == 0) {
-			/* 1 : déplacement OK */
-			go_left();
-		}
-	}
+				  }
+			  }
+		  }
+    } else {
+      /* Aligné, on vérifie juste la case à gauche */
+      if ((g_move_in_map[l_row] & l_column ) == 0) {
+        /* 1 : déplacement OK */
+        move_doGoLeft();
+      }
+    }
   }
-  /* 4 : pas de déplacement. */
+  /* not in moving condition */
 }
 
 /****************************************/
 /*   test function for right movement   */
 /****************************************/
-movertest()
+move_rightTest()
 {
 int column;
 char row;
@@ -81,51 +75,45 @@ char row;
   }
 
   if (g_spriteX & 0xf) {
-	/* En milieu de case, on passe */
-	go_right();
+    /* En milieu de case, on passe */
+    move_doGoRight();
   } else{
 	 /* En bout de case
 	  * On calcule la colonne actuelle (pour mask) */
 	 /*colNumber = spriteX/16;*/
 	 column = 1 << ((g_spriteX>>4)+1);
-	 /*column = 1;
-	 for (colNumber =0 ; colNumber < spriteX/16 +1; colNumber++) {
-		 column = column *2;
-	 }*/
-	 /* On fait un décalage pour tester la colonne à droite. */
-	 /*column = column *2;*/
 	 /* on calcul la ligne courante, à partir de la position en Y divisé par 16 */
 	 row = g_spriteY>>4;
 	 /* On test si on est aligné verticalement */
-      if (g_spriteY & 0xf) {
+   if (g_spriteY & 0xf) {
 		/* Non aligné, il faut vérifier les cases au dessus/au dessous */
 		 if (((g_move_in_map[row] & column ) == 0) &&
 			 ((g_move_in_map[row+1] & column ) == 0)) {
 				 /* 1 : déplacement OK */
-				 go_right();
+				 move_doGoRight();
 				 return;
 		 } else {
 			 if (((g_move_in_map[row] & column ) != 0) &&
 				((g_move_in_map[row+1] & column ) == 0)) {
 					/* 3 : Décalage vers le bas */
-					go_down();
+					move_doGoDown();
 					return;
 			 } else {
 				 if (((g_move_in_map[row] & column ) == 0) &&
 					((g_move_in_map[row+1] & column ) != 0)) {
 						/* 2 : Décalage vers le haut */
-						go_up();
+						move_doGoUp();
 						return;
 				}
 			 }
 		 }
-	} else {
-		/* Aligné, on vérifie juste la case à gauche */
-		if ((g_move_in_map[row] & column ) == 0) {
-			/* 1 : déplacement OK */
-			go_right();
-		}
-	} 
+    } else {
+      /* Aligné, on vérifie juste la case à gauche */
+      if ((g_move_in_map[row] & column ) == 0) {
+        /* 1 : déplacement OK */
+        move_doGoRight();
+      }
+    } 
   }
   /* 4 : pas de déplacement. */
 }
@@ -133,7 +121,7 @@ char row;
 /*************************************/
 /*   test function for up movement   */
 /*************************************/
-moveutest()
+move_upTest()
 {
 int column, columnNext;
 char row;
@@ -145,45 +133,45 @@ char row;
 
   if (g_spriteY & 0xf) {
 	  /* En milieu de case, on passe */
-	go_up();
+    move_doGoUp();
   } else {
-	  column = 1 << (g_spriteX>>4);
-	  /* On calcul la ligne précédente */
-	  row = (g_spriteY>>4) -1;
+    column = 1 << (g_spriteX>>4);
+    /* On calcul la ligne précédente */
+    row = (g_spriteY>>4) -1;
     if (g_spriteX & 0xf) {
-	  /* Non aligné horizontalement, on calcule la colonne suivante */
-	  columnNext = column << 1;
-	  
-	  if (((g_move_in_map[row] & column) == 0) &&
-	       ((g_move_in_map[row] & columnNext) == 0)) {
-		 /* Les 2 cases laissent passer */
-		 /* 1 : déplacement OK */
-		 go_up();
-		 return;
-	  } else {
-		  if (((g_move_in_map[row] & column) != 0) &&
-			  ((g_move_in_map[row] & columnNext) == 0)) {
-		    /* La colonne de droite est libre */
-			/* 3 : décalage à droite */
-			go_right();
-			return;
-		  } else {
-			  if (((g_move_in_map[row] & column) == 0) &&
-			      ((g_move_in_map[row] & columnNext) != 0)) {
-			    /* La colonne de gauche est libre */
-				/* 2: décalage à gauche */
-				go_left();
-				return;
-			  }
-		  }
-	  }
-	} else {
-	  /* On est aligné, on teste juste la case au dessus */
-	  if ((g_move_in_map[row] & column) == 0) {
-		/* 1 : déplacement OK */
-		go_up();
-	  }
-	}
+      /* Non aligné horizontalement, on calcule la colonne suivante */
+      columnNext = column << 1;
+      
+      if (((g_move_in_map[row] & column) == 0) &&
+           ((g_move_in_map[row] & columnNext) == 0)) {
+       /* Les 2 cases laissent passer */
+       /* 1 : déplacement OK */
+       move_doGoUp();
+       return;
+      } else {
+        if (((g_move_in_map[row] & column) != 0) &&
+          ((g_move_in_map[row] & columnNext) == 0)) {
+          /* La colonne de droite est libre */
+        /* 3 : décalage à droite */
+        move_doGoRight();
+        return;
+        } else {
+          if (((g_move_in_map[row] & column) == 0) &&
+              ((g_move_in_map[row] & columnNext) != 0)) {
+            /* La colonne de gauche est libre */
+          /* 2: décalage à gauche */
+          move_doGoLeft();
+          return;
+          }
+        }
+      }
+    } else {
+      /* On est aligné, on teste juste la case au dessus */
+      if ((g_move_in_map[row] & column) == 0) {
+      /* 1 : déplacement OK */
+      move_doGoUp();
+      }
+    }
   }
   /* 4 : Déplacement refusé */
 }
@@ -191,7 +179,7 @@ char row;
 /***************************************/
 /*   test function for down movement   */
 /***************************************/
-movedtest()
+move_downTest()
 {
 int column, columnNext;
 char row;
@@ -203,45 +191,45 @@ char row;
 
   if (g_spriteY & 0xf) {
 	  /* En milieu de case, on passe */
-	go_down();
+    move_doGoDown();
   } else {
 	  column = 1 << (g_spriteX>>4);
 	  /* On calcul la ligne suivante */
 	  row = (g_spriteY>>4) +1;
     if (g_spriteX & 0xf) {
-	  /* Non aligné horizontalement, on calcule la colonne suivante */
-	  columnNext = column << 1;
-	  
-	  if (((g_move_in_map[row] & column) == 0) &&
-	       ((g_move_in_map[row] & columnNext) == 0)) {
-		/* Les 2 cases laisses passer */
-		/* 1 : déplacement OK */
-		go_down();
-		return;
-	  } else {
-		  if (((g_move_in_map[row] & column) != 0) &&
-			  ((g_move_in_map[row] & columnNext) == 0)) {
-		    /* La colonne de droite est libre */
-			/* 3 : décalage à droite */
-			go_right();
-			return;
-		  } else {
-			  if (((g_move_in_map[row] & column) == 0) &&
-			      ((g_move_in_map[row] & columnNext) != 0)) {
-			    /* La colonne de gauche est libre */
-				/* 2: décalage à gauche */
-				go_left();
-				return;
-			  }
-		  }
-	  }
-	} else {
-	  /* On est aligné, on teste juste la case au dessus */
-	  if ((g_move_in_map[row] & column) == 0) {
-		/* 1 : déplacement OK */
-		go_down();
-	  }
-	}
+      /* Non aligné horizontalement, on calcule la colonne suivante */
+      columnNext = column << 1;
+      
+      if (((g_move_in_map[row] & column) == 0) &&
+           ((g_move_in_map[row] & columnNext) == 0)) {
+      /* Les 2 cases laisses passer */
+      /* 1 : déplacement OK */
+      move_doGoDown();
+      return;
+      } else {
+        if (((g_move_in_map[row] & column) != 0) &&
+          ((g_move_in_map[row] & columnNext) == 0)) {
+          /* La colonne de droite est libre */
+        /* 3 : décalage à droite */
+        move_doGoRight();
+        return;
+        } else {
+          if (((g_move_in_map[row] & column) == 0) &&
+              ((g_move_in_map[row] & columnNext) != 0)) {
+            /* La colonne de gauche est libre */
+          /* 2: décalage à gauche */
+          move_doGoLeft();
+          return;
+          }
+        }
+      }
+    } else {
+      /* On est aligné, on teste juste la case au dessus */
+      if ((g_move_in_map[row] & column) == 0) {
+      /* 1 : déplacement OK */
+      move_doGoDown();
+      }
+    }
   }
   /* 4 : Déplacement refusé */
 }
@@ -251,16 +239,16 @@ manage_move() {
 	/* RAZ de la direction */
 	g_direction = 0;
 	if (joy(0) & JOY_LEFT) {
-	  moveltest();
+	  move_leftTest();
 	}
     if (joy(0) & JOY_RGHT) {
-	  movertest();
+	  move_rightTest();
 	}
     if (joy(0) & JOY_UP) {
-	  moveutest();
+	  move_upTest();
 	}
     if (joy(0) & JOY_DOWN) {
-	  movedtest();
+	  move_downTest();
 	}
   
   if (g_direction != 0 && g_nb_monsters > 0) {
@@ -279,7 +267,7 @@ manage_move() {
   }
 }
 
-go_left() {
+move_doGoLeft() {
   /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
   if (!g_direction) {
     g_meter++;
@@ -294,7 +282,7 @@ go_left() {
   }
 }
 
-go_right() {
+move_doGoRight() {
   /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
   if (!g_direction) {
     g_meter++;
@@ -309,7 +297,7 @@ go_right() {
   }
 }
 
-go_up() {
+move_doGoUp() {
   /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
   if (!g_direction) {
     g_meter++;
@@ -324,7 +312,7 @@ go_up() {
   }
 }
 
-go_down() {
+move_doGoDown() {
   /* S'il n'y a pas encore eu de déplacement, on incrémente les compteurs */
   if (!g_direction) {
     g_meter++;

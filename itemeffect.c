@@ -1,7 +1,7 @@
 /****************************************/
 /*            Item effect               */
 /****************************************/
-itemeffect(item,target)
+itemeffect_baseEffect(item,target)
 char item,target;
 {
 

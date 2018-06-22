@@ -9,8 +9,6 @@
 #include "var.c"
 #include "monsters.c"
 #include "magic.c"
-/*#include "musicsystem.c"
-#include "music4.c"*/
 #include "silence.c"
 #include "cadre.c"
 #include "itemeffect.c"
@@ -39,7 +37,7 @@ main()
   l_defN = c_monsterDef[g_monsterID];
   l_dexN = c_monsterDex[g_monsterID];
   cls();
-  init_graph();
+  graphbattle_init();
 
   /*silence();*/
   /*music4Init();*/
@@ -63,14 +61,14 @@ main()
     cls();
     set_font_color(1,2);
     load_default_font();
-    battlescreen();
-    border(10,22,22,6);
+    graphbattle_battlescreen();
+    cadre_border(10,22,22,6);
 
     for(i=0;i<4;i++)
       g_hp[i]=l_oldHP[i];
     l_life_enemy=l_life_init;
     continu=1;
-    RInit(l_dexN);
+    battle_roundInit(l_dexN);
 
     for(i=0;i<4;i++)
     {
@@ -78,7 +76,7 @@ main()
       {
         g_battleX[i]=200;
         g_battleY[i]=16+(i+1)*32;
-        spr_set(50+i);
+        spr_set(FIGHT_CHAR_SPR+i);
         spr_pri(1);
         if (i==0)
           spr_pattern(PLAYER1PTR+0x240);
@@ -95,7 +93,7 @@ main()
       }
     }
 
-    spr_set(54);
+    spr_set(FIGHT_CHAR_SPR+4);
     spr_pri(1);
     spr_pattern(0X6000);
     spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_32x32);
@@ -108,10 +106,8 @@ main()
 
     while ((g_hp[0]>0) && (g_hp[1]>0) && (l_life_enemy>0))
     {
-      fightframe(l_life_enemy,turn);
-      turn=STurn(l_dexN);
-      /*play[turn]=0;*/
-      /*spr_set(50+turn);*/
+      graphbattle_fightframe(l_life_enemy,turn);
+      turn=battle_selectNextTurn(l_dexN);
       satb_update();
 
       switch(turn)
@@ -119,95 +115,30 @@ main()
         /*    PLAYER 1    */
         case 0:
 
-          BattleP1(g_nameP1, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
-          /*turn=STurn(turn);*/
-
+          battle_playerAction(g_nameP1, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
           break;
 
           /*    PLAYER 2    */
         case 1:
 
-          BattleP1(g_nameP2, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
-          /*turn=STurn(turn);*/
-
+          battle_playerAction(g_nameP2, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
           break;
 
           /*    PLAYER 3    */
           /*  case 2:
 
-    switch(battleselect())
-    {
-     case 1:
-      wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
-      if (wound)
-       {
-        put_string(NamP3,2,1);
-        put_string("hit for      points",9,1);
-        life_enemy-=wound;
-        put_number(wound,4,16,1);
-       }
-        else
-         {
-    put_string(NamP3,2,1);
-    put_string("missed",9,1);
-         }
-
-       turn=STurn(turn);
-       break;
-
-     case 2:
-         Magicbattle(turn,life_enemy,enemyres);
-         break;
-     case 3:
-         Special(turn);
-         break;
-     case 4:
-         Battleitem(turn);
-         break;
-     }
-    break;
+          battle_playerAction(g_nameP3, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
 
   /*    PLAYER 4    */
           /*  case 3:
 
-    switch(battleselect())
-    {
-     case 1:
-      wound=fight(AtkP[turn],DexP[turn],DefN,DexN);
-      if (wound)
-       {
-        put_string(NamP4,2,1);
-        put_string("hit for      points",9,1);
-        life_enemy-=wound;
-        put_number(wound,4,16,1);
-       }
-        else
-         {
-    put_string(NamP4,2,1);
-    put_string("missed",9,1);
-         }
-
-       turn=STurn(turn);
-       break;
-
-     case 2:
-         Magicbattle(turn,life_enemy,enemyres);
-         break;
-     case 3:
-         Special(turn);
-         break;
-     case 4:
-         Battleitem(turn);
-         break;
-     }
-    break;
+          battle_playerAction(g_nameP4, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
 
   /*      ENEMY 1      */
         case 4:
-          spr_set(54);
-          /*spr_pal(SPRITEPAL);*/
-          blank(1,23,8,4);
-          border(0,22,10,6);
+          spr_set(FIGHT_CHAR_SPR+4);
+          cadre_blank(1,23,8,4);
+          cadre_border(0,22,10,6);
           put_string("PUSH",3,23);
           put_string("START",3,25);
 
@@ -217,7 +148,7 @@ main()
             vsync();
           }
 
-          blank(1,1,30,1);
+          cadre_blank(1,1,30,1);
           put_string("Enemy attacks",3,1);
 
           target=rand()%2;
@@ -225,50 +156,44 @@ main()
 
           for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
           for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
-          l_wound=fight(l_atkN,l_dexN,g_defP[target],g_dexP[target]);
+          l_wound=battle_fight(l_atkN,l_dexN,g_defP[target],g_dexP[target]);
           if (l_wound)
           {
             g_hp[target]-=l_wound;
-            damage(l_wound,200,(target+1)*32);
+            battle_showDamage(l_wound,200,(target+1)*32);
             if (g_hp[target]<0) g_hp[target]=0;
           }
-          else
-            blank(1,1,30,1);
+          else {
+            cadre_blank(1,1,30,1);
             satb_update();
             vsync(1);
-            put_string("He missed",3,1);
-
-          /*turn=STurn(turn);*/
+            put_string("He missed     ",3,1);
+          }
           break;
       }
-
-      /*playing=0;
-     for(i=0;i<5;i++) playing+=play[i];
-     if (!(playing))
-       {
-        RInit(DexN);
-        turn=STurn(DexN);
-       }*/
-      /*music_update();*/
+      
       vsync(2);
     }
+    
+    /* Fight ended, all players or monsters dead */
 
-    fightframe(l_life_enemy,4);
-    for(i=0;i<4;i++)
+    graphbattle_fightframe(l_life_enemy,4);
+    for(i=0;i<4;i++) {
       put_number(g_hp[i],5,25,23+i);
+    }
     /* For debug purpose only */
     put_number(l_life_enemy,5,25,21);
 
     silence();
     g_battleEnd=1;
     vsync(60);
-    blank(1,1,30,1);
+    cadre_blank(1,1,30,1);
 
-    if (!(bonus(l_exp)))
+    if (!(battle_bonus(l_exp)))
     {
       for(i=0;i<5;i++)
       {
-        spr_set(50+i);
+        spr_set(FIGHT_CHAR_SPR+i);
         spr_hide();
       }
       for(i=0;i<4;i++)
@@ -297,8 +222,8 @@ main()
 /*********************************************/
 /*            Fight Sequence                 */
 /*********************************************/
-unsigned int fight(p_atk1,p_dex1,p_def2,p_dex2)
-STAT_TYPE p_atk1,p_dex1,p_def2,p_dex2;
+unsigned int battle_fight(p_atk1,p_dex1,p_defTarget,p_dexTarget)
+STAT_TYPE p_atk1,p_dex1,p_defTarget,p_dexTarget;
 {
   int l_hit,l_wound;
   unsigned int l_randResult;
@@ -308,7 +233,7 @@ STAT_TYPE p_atk1,p_dex1,p_def2,p_dex2;
   l_randResult = rand();
   l_hit += l_randResult % p_dex1;
   l_randResult = rand();
-  l_hit -= l_randResult % p_dex2;
+  l_hit -= l_randResult % p_dexTarget;
   /*hit=2*(rand() % Dex1) - (rand() % Dex2);*/
   if (l_hit<0)
     return 0;
@@ -319,7 +244,7 @@ STAT_TYPE p_atk1,p_dex1,p_def2,p_dex2;
     l_randResult = rand();
     l_wound += l_randResult % p_atk1;
     l_randResult = rand();
-    l_wound -= l_randResult % p_def2;
+    l_wound -= l_randResult % p_defTarget;
     /*wound=2*(rand() % Atk1) - (rand() % Def2);*/
     if (l_wound<=0)
       return 1;
@@ -330,9 +255,9 @@ STAT_TYPE p_atk1,p_dex1,p_def2,p_dex2;
   }
 }
 /*********************************************/
-/*              Battle Option                */
+/*           Battle Option selection         */
 /*********************************************/
-battleselect()
+battle_select()
 {
   unsigned char l_select;
 
@@ -342,42 +267,46 @@ battleselect()
   put_string("Magic",2,24);
   put_string("Special",2,25);
   put_string("Item",2,26);
-  border(0,22,10,6);
+  cadre_border(0,22,10,6);
 
   while(!(joytrg(0) & JOY_A))
   {
     if ((joytrg(0) & JOY_DOWN) && (l_select<4))
-    { put_char(' ',1,22+l_select);
-    l_select++;
-    put_char('>',1,22+l_select);
+    {
+      put_char(' ',1,22+l_select);
+      l_select++;
+      put_char('>',1,22+l_select);
     }
     if ((joytrg(0) & JOY_UP) && (l_select>1))
-    { put_char(' ',1,22+l_select);
-    l_select--;
-    put_char('>',1,22+l_select);
+    {
+      put_char(' ',1,22+l_select);
+      l_select--;
+      put_char('>',1,22+l_select);
     }
-    /*music_update();*/
     vsync(1);
     rand();
   }
+  
+  /* Selection done */
   put_char(' ',1,22+l_select);
-  blank(1,1,30,1);
+  cadre_blank(1,1,30,1);
 
   return l_select;
 }
 /*********************************************/
 /*              Battle Magic                 */
 /*********************************************/
-Magicbattle(p_player,p_enemyHP,p_enemyres)
+battle_magic(p_player,p_enemyHP,p_enemyres)
 char p_player;
 int *p_enemyHP;
 RESIST_TYPE p_enemyres;
 {
   unsigned char l_select,i,j;
+  unsigned int l_basePattern;
 
-  blank(1,23,30,4);
-  border(0,22,24,6);
-  border(24,22,8,6);
+  cadre_blank(1,23,30,4);
+  cadre_border(0,22,24,6);
+  cadre_border(24,22,8,6);
   put_string("MP Use",25,24);
   l_select=0;
   put_char('>',1,23+l_select);
@@ -390,275 +319,116 @@ RESIST_TYPE p_enemyres;
   }
   satb_update();
 
+  /* get base character pattern */
   switch (p_player)
   {
-    case 0: /* Player 1 magic */
-    {
-      for(i=0;i<4;i++) put_string(c_magicname[i],2,23+i);
+    case 0: /* Player 1 */
+      l_basePattern = PLAYER1PTR;
+      break;
+    case 1:
+      l_basePattern = PLAYER2PTR;
+      break;
+    case 2 :
+      l_basePattern = PLAYER1PTR;
+      break;
+    case 3 :
+      l_basePattern = PLAYER1PTR;
+      break;
+  }
 
-      while(!(joytrg(0) & (JOY_STRT | JOY_B)))
-      {
-        /*music_update();*/
-        put_number(c_magicmp[l_select],2,27,25);
-        if (joytrg(0))
-        {
-          if (joytrg(0) & JOY_A)
-          {
-            spr_set(50);
-            for(i=0;i<6;i++)
-            {
-              if (i&0X1)
-              {
-                spr_pattern(PLAYER1PTR+0x240);
-                satb_update();
-                for(j=0;j<5;j++)
-                {
-                  /*music_update();*/
-                  vsync(1);
-                }
-              }
-              else
-              {
-                spr_pattern(PLAYER1PTR+0x280);
-                satb_update();
-                for(j=0;j<2;j++)
-                {
-                  /*music_update();*/
-                  vsync(1);
-                }
-              }
-            }
-            
-            /* Magic graphical effect */
-            switch(l_select)
-            {
-              case 0:
-              {
-                Fireball(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
-                break;
-              }
-              case 1:
-              {
-                Icefall(g_battleX[4],g_battleY[4]);
-                break;
-              }
-              default:
-              {
-                Fireball(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
-                break;
-              }
-            }/*end switch*/
-
-            (*p_enemyHP) -= magicDamage(p_player,l_select,p_enemyres);
-
-            for(i=0; i<8; i++)
-            {
-              spr_set(BARBASESPR+i);
-              spr_show();
-            }
-            satb_update();
-            return;
-          }
-          
-          if ((joytrg(0) & JOY_UP) && (l_select>0)) l_select--;
-          if ((joytrg(0) & JOY_DOWN) && (l_select<9)) l_select++;
-          blank(1,23,22,4);
-          if (l_select<2)
-          {
-            put_char('>',1,23+l_select);
-            for(i=0;i<4;i++) put_string(c_magicname[i],2,23+i);
-          }
-          else
-          {
-            if (l_select==9)
-            {
-              put_char('>',1,26);
-              for(i=l_select-3;i<l_select+1;i++) put_string(c_magicname[i],2,26+i-l_select);
-            }
-            else
-            {
-              put_char('>',1,25);
-              for(i=l_select-2;i<l_select+2;i++) put_string(c_magicname[i],2,25+i-l_select);
-            }
-          }
-        }
-
-        vsync();
-      }
-    }
-
-
-    case 1: /* Player 2 magic */
-    {
-      for(i=0;i<4;i++) put_string(c_magicname[i],2,23+i);
-
-      while(!(joytrg(0) & (JOY_STRT | JOY_B)))
-      {
-        /*music_update();*/
-        put_number(c_magicmp[l_select],2,27,25);
-        if (joytrg(0))
-        {
-          if (joytrg(0) & JOY_A)
-          {
-            spr_set(51);
-            for(i=0;i<6;i++)
-            {
-              if (i&0X1)
-              {
-                spr_pattern(PLAYER2PTR+0x240);
-                satb_update();
-                for(j=0;j<5;j++)
-                {
-                  /*music_update();*/
-                  vsync(1);
-                }
-              }
-              else
-              {
-                spr_pattern(PLAYER2PTR+0x280);
-                satb_update();
-                for(j=0;j<2;j++)
-                {
-                  /*music_update();*/
-                  vsync(1);
-                }
-              }
-            }
-            
-            /* Magic graphical effect */
-            switch(l_select)
-            {
-              case 0:
-              {
-                Fireball(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
-                break;
-              }
-              case 1:
-              {
-                Icefall(g_battleX[4],g_battleY[4]);
-                break;
-              }
-              default:
-              {
-                Fireball(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
-                break;
-              }
-            }/*end switch*/
-            
-            (*p_enemyHP) -= magicDamage(p_player,l_select,p_enemyres);
-            
-            for(i=0; i<8; i++)
-            {
-              spr_set(BARBASESPR+i);
-              spr_show();
-            }
-            satb_update();
-            return;
-          }
-          if ((joytrg(0) & JOY_UP) && (l_select>0)) l_select--;
-          if ((joytrg(0) & JOY_DOWN) && (l_select<9)) l_select++;
-          blank(1,23,22,4);
-          if (l_select<2)
-          {
-            put_char('>',1,23+l_select);
-            for(i=0;i<4;i++) put_string(c_magicname[i],2,23+i);
-          }
-          else
-          {
-            if (l_select==9)
-            {
-              put_char('>',1,26);
-              for(i=l_select-3;i<l_select+1;i++) put_string(c_magicname[i],2,26+i-l_select);
-            }
-            else
-            {
-              put_char('>',1,25);
-              for(i=l_select-2;i<l_select+2;i++) put_string(c_magicname[i],2,25+i-l_select);
-            }
-          }
-        }
-
-        vsync();
-      }
-      /*  case 2:
- {
-  for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-
-  while(!(joytrg(0) & JOY_STRT))
+  /* Put initial magic names */
+  for(i=0;i<4;i++) {
+    put_string(c_magicname[i],2,23+i);
+  }
+  
+  while(!(joytrg(0) & (JOY_STRT | JOY_B)))
   {
-  put_number(magicmp[select],2,27,25);
+    /*music_update();*/
+    put_number(c_magicmp[l_select],2,27,25);
     if (joytrg(0))
-   {
-     if (joytrg(0) & JOY_A)
-      {
-       magiceffect(player,select,enemyHP,0,enemyres);
-      }
-     if ((joytrg(0) & JOY_UP) && (select>0)) select--;
-     if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
-   blank(1,23,22,4);
-   if (select<2)
     {
-     put_char('>',1,23+select);
-     for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-    }
-   else
-    {
-     if (select==9)
+      if (joytrg(0) & JOY_A)
       {
-       put_char('>',1,26);
-       for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
-      }
-     else
-      {
-       put_char('>',1,25);
-       for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
-      }
-    }
-   }
+        /* Character magic animation */
+        spr_set(FIGHT_CHAR_SPR+p_player);
+        for(i=0;i<6;i++)
+        {
+          if (i&0X1)
+          {
+            spr_pattern(l_basePattern+0x240);
+            satb_update();
+            /*for(j=0;j<5;j++)*/
+            {
+              vsync(5);
+            }
+          }
+          else
+          {
+            spr_pattern(l_basePattern+0x280);
+            satb_update();
+            vsync(2);
+          }
+        }
+   
+        /* Magic graphical effect */
+        switch(l_select)
+        {
+          case 0:
+          {
+            magic_fireballVisual(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
+            break;
+          }
+          case 1:
+          {
+            magic_iceVisual(g_battleX[4],g_battleY[4]);
+            break;
+          }
+          default:
+          {
+            magic_fireballVisual(g_battleX[p_player],g_battleY[p_player],g_battleX[4],g_battleY[4]);
+            break;
+          }
+        }/*end switch*/
 
-   vsync();
-  }
- }
- case 3:
- {
-  for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
+        (*p_enemyHP) -= magic_damage(p_player,l_select,p_enemyres);
+        
+        for(i=0; i<8; i++)
+        {
+          spr_set(BARBASESPR+i);
+          spr_show();
+        }
+        satb_update();
+        return;
+      }
+          
+      if ((joytrg(0) & JOY_UP) && (l_select>0))
+        l_select--;
+      if ((joytrg(0) & JOY_DOWN) && (l_select<9))
+        l_select++;
+      cadre_blank(1,23,22,4);
+      if (l_select<2)
+      {
+        put_char('>',1,23+l_select);
+        for(i=0;i<4;i++) put_string(c_magicname[i],2,23+i);
+      }
+      else
+      {
+        if (l_select==9)
+        {
+          put_char('>',1,26);
+          for(i=l_select-3;i<l_select+1;i++) put_string(c_magicname[i],2,26+i-l_select);
+        }
+        else
+        {
+          put_char('>',1,25);
+          for(i=l_select-2;i<l_select+2;i++) put_string(c_magicname[i],2,25+i-l_select);
+        }
+      }
+    }
 
-  while(!(joytrg(0) & JOY_STRT))
-  {
-  put_number(magicmp[select],2,27,25);
-  if (joytrg(0))
-   {
-     if (joytrg(0) & JOY_A)
-      {
-       magiceffect(player,select,enemyHP,0,enemyres);
-      }
-     if ((joytrg(0) & JOY_UP) && (select>0)) select--;
-     if ((joytrg(0) & JOY_DOWN) && (select<9)) select++;
-      blank(1,23,22,4);
-   if (select<2)
-    {
-     put_char('>',1,23+select);
-     for(i=0;i<4;i++) put_string(magicname[i],2,23+i);
-    }
-   else
-    {
-     if (select==9)
-      {
-       put_char('>',1,26);
-       for(i=select-3;i<select+1;i++) put_string(magicname[i],2,26+i-select);
-      }
-     else
-      {
-       put_char('>',1,25);
-       for(i=select-2;i<select+2;i++) put_string(magicname[i],2,25+i-select);
-      }
-    }
-   }
-   vsync();
-   }
- } */
-    }
-  }
+    vsync();
+  } 
+
   for(i=0; i<8; i++)
   {
     spr_set(BARBASESPR+i);
@@ -669,28 +439,27 @@ RESIST_TYPE p_enemyres;
 /*********************************************/
 /*             Battle Special                */
 /*********************************************/
-Special(p_player)
+battle_special(p_player)
 char p_player;
 {
-  blank(1,23,30,4);
-  border(0,22,32,6);
+  cadre_blank(1,23,30,4);
+  cadre_border(0,22,32,6);
   vsync();
   while(!(joy(0)))
   {
-    /*music_update();*/
     vsync();
   }
 }
 /*********************************************/
 /*               Battle Item                 */
 /*********************************************/
-Battleitem(p_player)
+battle_item(p_player)
 char p_player;
 {
   char l_select,i;
-  blank(1,23,30,4);
-  border(0,22,20,6);
-  border(20,22,12,6);
+  cadre_blank(1,23,30,4);
+  cadre_border(0,22,20,6);
+  cadre_border(20,22,12,6);
   vsync();
   l_select=0;
   put_string("Items left",21,24);
@@ -704,7 +473,8 @@ char p_player;
   satb_update();
   vsync();
 
-  for(i=0;i<4;i++) put_string(c_item[i],2,23+i);
+  for(i=0;i<4;i++)
+    put_string(c_item[i],2,23+i);
 
   while(!(joytrg(0) & (JOY_STRT|JOY_B)))
   {
@@ -715,12 +485,14 @@ char p_player;
         if (g_itemnb[l_select]>0)
         {
           g_itemnb[l_select]--;
-          itemeffect(l_select,p_player);
+          battle_itemEffect(l_select,p_player);
           return 1;
         }
-      if ((joytrg(0) & JOY_UP) && (l_select>0)) l_select--;
-      if ((joytrg(0) & JOY_DOWN) && (l_select<6)) l_select++;
-      blank(1,23,18,4);
+      if ((joytrg(0) & JOY_UP) && (l_select>0))
+        l_select--;
+      if ((joytrg(0) & JOY_DOWN) && (l_select<6))
+        l_select++;
+      cadre_blank(1,23,18,4);
       if (l_select<2)
       {
         put_char('>',1,23+l_select);
@@ -740,9 +512,9 @@ char p_player;
         }
       }
     }
-    /*music_update();*/
     vsync();
   }
+  
   for(i=0; i<8; i++)
   {
     spr_set(BARBASESPR+i);
@@ -755,7 +527,7 @@ char p_player;
 /*********************************************/
 /*              Battle Bonus                 */
 /*********************************************/
-bonus(p_exp)
+battle_bonus(p_exp)
 int p_exp;
 {
   char i,l_continu;
@@ -765,7 +537,7 @@ int p_exp;
   {
     put_string("You won",8,1);
     vsync(60);
-    blank(1,1,30,1);
+    cadre_blank(1,1,30,1);
     put_string("Got",1,1);
     put_number(p_exp,5,5,1);
     put_string("experience point(s)",11,1);
@@ -806,8 +578,8 @@ int p_exp;
 /************************************/
 /*            Select Turn           */
 /************************************/
-STurn(p_dexN)
-STAT_TYPE p_dexN;
+battle_selectNextTurn(p_dexMonster)
+STAT_TYPE p_dexMonster;
 {
   char i;
   char l_next;
@@ -849,7 +621,7 @@ STAT_TYPE p_dexN;
         }
       }
     }
-    g_roundCount[4] += p_dexN;
+    g_roundCount[4] += p_dexMonster;
     if(g_roundCount[4]>3520) l_next=4;
 
     /*music_update();*/
@@ -860,34 +632,14 @@ STAT_TYPE p_dexN;
 
   return l_next;
 }
-/*
-for (i=0;i<4;i++)
-   if (play[i])
-      if (round[i]==round[turn]+1) turn=i;
-	    else if (round[i]<round[turn]) turn=i;
-
-if (((round[4]<round[turn]) || (round[4]==round[turn]+1)) && (play[4])) turn=4;
-
-round[turn]=10;
-
-return turn;
-}*/
 /************************************/
 /*            Round Init            */
 /************************************/
-RInit(p_dexN)
-STAT_TYPE p_dexN;
+battle_roundInit(p_dexMonster)
+STAT_TYPE p_dexMonster;
 {
-  char i;/*,j,Max;*/
-  /*for(i=0;i<4;i++)
- {
-  round[i]=5;
-  if (HPp[i]>0) play[i]=1;
- }
- round[4]=5;
- play[4]=1;
+  char i;
 
-   */
   for(i=0;i<4;i++)
   {
     g_roundCount[i] = rand() % g_dexP[i];
@@ -928,25 +680,16 @@ STAT_TYPE p_dexN;
 
     }
   }
-  g_roundCount[4] = rand() % p_dexN;
+  g_roundCount[4] = rand() % p_dexMonster;
 
-  /*for(i=0;i<5;i++)
- {
-  Max=0;
-  for(j=0;j<4;j++)
-       if ((DexP[j]>=DexP[Max]) && (round[j]>i)) Max=j;
-
-    if ((DexP[Max]<=DexN) && (round[5]<i)) round[5]=i;
-    else round[Max]=i;
- }*/
 }
 /*****************************************************/
-/*             Player 1 battle system                */
+/*             Player battle system                */
 /*****************************************************/
-BattleP1(p_name_player,p_player_id,p_life_enemy,p_defN,p_dexN,p_enemyres)
+battle_playerAction(p_name_player,p_player_id,p_life_enemy,p_defMonster,p_dexMonster,p_enemyres)
 char* p_name_player;
 char p_player_id;
-STAT_TYPE p_defN,p_dexN;
+STAT_TYPE p_defMonster,p_dexMonster;
 RESIST_TYPE p_enemyres;
 int *p_life_enemy;
 {
@@ -957,24 +700,21 @@ int *p_life_enemy;
 
   while(l_move)
   {
-    /*music_update();*/
-    fightframe((*p_life_enemy),p_player_id);
-    spr_set(50+p_player_id);
-    switch(battleselect())
+    graphbattle_fightframe((*p_life_enemy),p_player_id);
+    spr_set(FIGHT_CHAR_SPR+p_player_id);
+    switch(battle_select())
     {
       case 1:
-        l_wound=fight(g_atkP[p_player_id],g_dexP[p_player_id],p_defN,p_dexN);
+        l_wound=battle_fight(g_atkP[p_player_id],g_dexP[p_player_id],p_defMonster,p_dexMonster);
         for(i=0;i<5;i++)
         {
           spr_x(spr_get_x()-1);
-          /*music_update();*/
           satb_update();
           vsync();
         }
         for(i=0;i<5;i++)
         {
           spr_x(spr_get_x()+1);
-          /*music_update();*/
           satb_update();
           vsync();
         }
@@ -983,7 +723,7 @@ int *p_life_enemy;
           put_string(p_name_player,2,1);
           put_string("attacks",9,1);
           (*p_life_enemy)-=l_wound;
-          damage(l_wound,40,80);
+          battle_showDamage(l_wound,40,80);
         }
         else
         {
@@ -997,101 +737,30 @@ int *p_life_enemy;
       case 2:
 
         l_res=*p_life_enemy;
-        Magicbattle(p_player_id,p_life_enemy,p_enemyres);
+        battle_magic(p_player_id,p_life_enemy,p_enemyres);
         if (!(l_res==(*p_life_enemy)))
         {
           put_string(p_name_player,1,1);
           put_string("used magic",8,1);
-          damage(l_res-(*p_life_enemy),40,80);
+          battle_showDamage(l_res-(*p_life_enemy),40,80);
           l_move=0;
         }
         break;
       case 3:
-        Special(p_player_id);
+        battle_special(p_player_id);
         break;
       case 4:
-        if (Battleitem(p_player_id))
+        if (battle_item(p_player_id))
           l_move=0;
         break;
     }
   }
 }
 
-/***************************************************/
-/*            Player 2 battle system               */
-/***************************************************/
-/*BattleP2(life_enemy,DefN,DexN,enemyres)
-STAT_TYPE DefN,DexN;
-RESIST_TYPE enemyres;
-int *life_enemy;
-{
-  unsigned char move,i;
-  unsigned int wound;
-  int res;
-  
-  move=1;
-
-  while(move)
-  {
-    fightframe((*life_enemy),1);
-    spr_set(51);
-    switch(battleselect())
-    {
-      case 1:
-        wound=fight(AtkP[1],DexP[1],DefN,DexN);
-        for(i=0;i<5;i++)
-        {
-          spr_x(spr_get_x()-1);
-          satb_update();
-          vsync();
-        }
-        for(i=0;i<5;i++)
-        {
-          spr_x(spr_get_x()+1);
-          satb_update();
-          vsync();
-        }
-        if (wound)
-        {
-          put_string(NamP2,2,1);
-          put_string("attacks",9,1);
-          damage(wound,40,80);
-          (*life_enemy)-=wound;
-        }
-        else
-        {
-          put_string(NamP2,2,1);
-          put_string("missed",9,1);
-        }
-
-        move=0;
-        break;
-
-      case 2:
-        res=*life_enemy;
-        Magicbattle(1,life_enemy,enemyres);
-
-        if (res!=*life_enemy)
-        {
-          put_string(NamP2,1,1);
-          put_string("used magic",8,1);
-          damage(res-(*life_enemy),40,80);
-          move=0;}
-        break;
-      case 3:
-        Special(1);
-        break;
-      case 4:
-        if (Battleitem(1)) move=0;
-        break;
-    }
-  }
-}*/
-
 /********************************************/
 /*        Graphique damage function         */
 /********************************************/
-damage(p_numbers,x,y)
+battle_showDamage(p_numbers,x,y)
 int p_numbers;
 char x,y;
 {
@@ -1117,6 +786,7 @@ char x,y;
   }
   max=4;
 
+  /* compute how many digits to show */
   if (p_numbers<1000)
   {
     spr_set(10);
@@ -1136,6 +806,7 @@ char x,y;
     }
   }
 
+  /* init sprites with digit values */
   for(i=0;i<max;i++)
   {
     spr_set(13-i);
@@ -1146,35 +817,36 @@ char x,y;
   }
 
 
-
+  /* number go up */
   for(j=0;j<4;j++)
   {
     for(i=0;i<max;i++)
     {
       spr_set(13-i);
       spr_y(spr_get_y()-1);
-      /*music_update();*/
       satb_update();
       vsync();
     }
   }
 
+  /* number go down */
   for(j=0;j<10;j++)
-  { for(i=0;i<max;i++)
   {
-    spr_set(13-i);
-    spr_y(spr_get_y()+1);
-    /*music_update();*/
-    satb_update();
-    vsync();
-  }
+    for(i=0;i<max;i++)
+    {
+      spr_set(13-i);
+      spr_y(spr_get_y()+1);
+      satb_update();
+      vsync();
+    }
   }
 
-  for(i=0;i<30;i++)
-  {
-    /*music_update();*/
-    vsync(1);
-  }
+  /*for(i=0;i<30;i++)
+  {*/
+  /* wait half a second to show number */
+    vsync(30);
+  /*}*/
+  /* hide number */
   for(i=0;i<4;i++)
   {
     spr_set(10+i);
@@ -1184,3 +856,12 @@ char x,y;
 
 }
 
+/*************************************/
+/*       Battle item effect          */
+/*************************************/
+battle_itemEffect(item,target)
+char item,target;
+{
+  /* TODO : add visuel effect */
+  itemeffect_baseEffect(item,target);
+}

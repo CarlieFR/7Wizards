@@ -49,7 +49,7 @@ const char plain_bg[] = {
   T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain,
      T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain, T_Plain};
 
-init_graph() {
+graphbattle_init() {
   unsigned char i;
   
   set_screen_size(SCR_SIZE_32x32);
@@ -75,36 +75,39 @@ init_graph() {
 /*********************************************/
 /*           Fight low frame                 */
 /*********************************************/
-fightframe(life_enemy,turn)
-unsigned int life_enemy;
-char turn;
+graphbattle_fightframe(p_life_enemy, p_turn)
+int p_life_enemy;
+char p_turn;
 {
-char i;
+  char i;
 
- blank(1,23,30,4);
- border(10,22,22,6);
- put_string(g_nameP1,12,23);
- put_string(g_nameP2,12,24);
- put_string(g_nameP3,12,25);
- put_string(g_nameP4,12,26);
- put_string("Enemy",12,21);
- for(i=0;i<4;i++)
- {
-   put_number(g_hp[i],5,25,23+i);
-   /*spr_set(BARBASESPR+2*i);
-   spr_show();
-   spr_set(BARBASESPR+2*i+1);
-   spr_show();*/
- }
- put_number(life_enemy,5,25,21);
- blank(11,23,1,4);
- if (turn<4) put_char('>',11,23+turn);
+  cadre_blank(1,23,30,4);
+  cadre_border(10,22,22,6);
+  
+  put_string(g_nameP1,12,23);
+  put_string(g_nameP2,12,24);
+  put_string(g_nameP3,12,25);
+  put_string(g_nameP4,12,26);
+  if (DEBUG) {
+    put_string("Enemy",12,21);
+  }
+  
+  for(i=0;i<4;i++) {
+    put_number(g_hp[i],5,25,23+i);
+  }
+  if (DEBUG) {
+    put_number(p_life_enemy,5,25,21);
+  }
+  cadre_blank(11,23,1,4);
+  if (p_turn<4) {
+    put_char('>',11,23+p_turn);
+  }
 }
 
 /*********************************************/
 /*         Battle Background Display         */
 /*********************************************/
-battlescreen()
+graphbattle_battlescreen()
 {
   cls();
   
@@ -119,7 +122,6 @@ battlescreen()
 
   load_map(0,0, 0,0, 16,11);
  
-  blank(1,1,30,1);
-
-  border(0,0,32,3);
+  cadre_blank(1,1,30,1);
+  cadre_border(0,0,32,3);
 }

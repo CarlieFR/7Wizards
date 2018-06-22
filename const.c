@@ -5,6 +5,8 @@
 
 /* Coding */
 #define NULL 0
+/* Set to 1 for debug view, set to 0 for normal view */
+#define DEBUG 1
 
 /* attribute types */
 #define STAT_TYPE unsigned char
@@ -50,20 +52,25 @@
 #define PLAYER2PTR 0x6500
 #define NUMBERPTR 0x5500
 #define BARBASESPR 20
+#define FIGHT_CHAR_SPR 50
 
 /* Magic defines*/
+#define FIRE_MASK 0xf
 #define FIRE_WEAK 0x1
 #define FIRE_STRONG 0x2
 #define FIRE_NULL 0x4
 #define FIRE_ABSORB 0x8
+#define ICE_MASK 0xf0
 #define ICE_WEAK 0x10
 #define ICE_STRONG 0x20
 #define ICE_NULL 0x40
 #define ICE_ABSORB 0x80
+#define AIR_MASK 0xf00
 #define AIR_WEAK 0x100
 #define AIR_STRONG 0x200
 #define AIR_NULL 0x400
 #define AIR_ABSORB 0x800
+#define EARTH_MASK 0xf000
 #define EARTH_WEAK 0x1000
 #define EARTH_STRONG 0x2000
 #define EARTH_NULL 0x4000
@@ -110,7 +117,6 @@
  */
 const unsigned char tiles_pal_ref[250];
 
-#define Hill 0X12b6
 #define T_Hill 107
 
 #define T_WaterSky 108
@@ -118,54 +124,33 @@ const unsigned char tiles_pal_ref[250];
 #define T_PlainPuddle 85
 #define T_PlainTrunk 101
 
-#define Plain 0X122a
 #define T_Plain 112
 
-#define Forest 0X12e4
 #define T_Forest 114
 
-#define Fence 0X12e6
 #define T_Fence 115
 
-#define Pave 0X1220
 #define T_Pave 64
 
-#define HouseDoor11 0x1264
 #define T_HouseDoorOut 82
 
-#define HouseWindow 0x11e8
 #define T_HouseWindowDL 81
 #define T_HouseWindowDR 121
 #define T_HouseWindowM 120
 #define T_HouseWindowD 122
 
-#define HouseBlank11 0x11a4
 #define T_HouseBlankM 34
 #define T_HouseBlankD 50
 #define T_HouseBlankDR 83
 #define T_HouseBlankL 123
 #define T_HouseBlankR 124
 
-#define HouseRoofL11 0x1222
 #define T_HouseRoofL 65
 
-#define HouseRoofM11 0x1224
 #define T_HouseRoofM 66
 
-#define HouseRoofR11 0x1226
 #define T_HouseRoofR 67
 
-#define HouseIn 0x12ec
-
-
-#define HouseInWallUL 0x116e
-#define HouseInWallU 0x1170
-#define HouseInWallUR 0x1178
-#define HouseInWallL 0x11ae
-#define HouseInWallR 0x11b8
-#define HouseInWallDL 0x122e
-#define HouseInWallD 0x1230
-#define HouseInWallDR 0x1238
 /**
  * Intérieur de la maison
  */
@@ -189,11 +174,6 @@ const unsigned char tiles_pal_ref[250];
 #define T_HouseInWallFloor 92
 #define T_HouseInBed 56
 
-#define GrassPave11 0x113a
-#define GrassPave3111 0x113e
-#define GrassPave1411 0x11fa
-#define GrassPave3411 0x11fe
-
 /**
  * Chemin pavé avec herbe
  */
@@ -211,7 +191,6 @@ const unsigned char tiles_pal_ref[250];
 #define T_GrassPaveRDR 47
 
 
-#define FenceUL 0x112c
 #define T_FenceUL 6
 #define T_FenceL 22
 #define T_FenceDL 38
