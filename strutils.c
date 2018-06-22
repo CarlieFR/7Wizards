@@ -5,7 +5,7 @@
  /**
   * Convertit un chiffre en caractère correspondant.
   * TODO voir si on ne peux pas optimiser ça avec une addition.
-  * La valeuir en entrée doit être comprises entre 0 et 9.
+  * La valeur en entrée doit être comprises entre 0 et 9.
   */
 digit_as_str(number)
 int number;
@@ -207,7 +207,7 @@ char x,y,nb_lines;
             vsync(10);
           }
           /*put_string(empty_indicator, 27, y+1+(2*nb_lines));*/
-          blank(x,y,31-x,y-1+(2*nb_lines));
+          cadre_blank(x,y,31-x,y-1+(2*nb_lines));
           vsync(20);
         }
         
@@ -241,7 +241,7 @@ char x,y,nb_lines;
               vsync(10);
             }
             /*put_string(empty_indicator, 27, y-1+(2*nb_lines));*/
-            blank(x,y,31-x,y-1+(2*nb_lines));
+            cadre_blank(x,y,31-x,y-1+(2*nb_lines));
             vsync(20);
           }
         }
@@ -329,7 +329,7 @@ char x,y,nb_lines;
             }
             vsync(10);
           }
-          blank(x,y,31-x,y-1+(2*nb_lines));
+          cadre_blank(x,y,31-x,y-1+(2*nb_lines));
           vsync(20);
         }
     }

@@ -22,29 +22,30 @@ extern struct st_header TestMelancholia[];
 
 main()
 {
-  char select;
+  char l_select;
 
-  if(gameState==0)
+  if(g_gameState==0)
   {
+    /* Launch of the game, initialisation and main menu */
     cls();
     set_font_color(1,2);
     load_default_font();
 
-    first_time_map4 = 1;
+    g_first_time_map4 = 1;
 
-    while(1)
+   /* while(1)*/
     {
-      HPp[0]=MaxHP[0];
-      HPp[1]=MaxHP[1];
-      HPp[2]=0;
-      HPp[3]=0;
-      itemnb[0]=5;
-      itemnb[1]=2;
-      MPp[0]=MaxMP[0];
-      MPp[1]=MaxMP[1];
-      ExpP[0]=10;
-      ExpP[1]=10;
-      select=0;
+      g_hp[0]=g_maxHP[0];
+      g_hp[1]=g_maxHP[1];
+      g_hp[2]=0;
+      g_hp[3]=0;
+      g_itemnb[0]=5;
+      g_itemnb[1]=2;
+      g_mp[0]=g_maxMP[0];
+      g_mp[1]=g_maxMP[1];
+      g_expP[0]=10;
+      g_expP[1]=10;
+      l_select=0;
       /* Music initialisation*/
       st_set_song(bank(TestMelancholia), TestMelancholia);
 
@@ -68,80 +69,74 @@ main()
       put_string("Begin game",11,18);
       put_char('-',9,18);
 
-      /*st_reset();*/
       st_song_repeat_on();
       st_play_song();
 
       while (!(joytrg(0) & (JOY_STRT | JOY_A | JOY_B)))
       {
-        if ((joytrg(0) & JOY_UP) && (select>0))
+        if ((joytrg(0) & JOY_UP) && (l_select>0))
         {
-          select--;
-          put_char(' ',9,20+2*select);
-          put_char('-',9,18+2*select);
+          l_select--;
+          put_char(' ',9,20+2*l_select);
+          put_char('-',9,18+2*l_select);
         }
-        if ((joytrg(0) & JOY_DOWN) && (select<2))
+        if ((joytrg(0) & JOY_DOWN) && (l_select<2))
         {
-          select++;
-          put_char(' ',9,16+2*select);
-          put_char('-',9,18+2*select);
+          l_select++;
+          put_char(' ',9,16+2*l_select);
+          put_char('-',9,18+2*l_select);
         }
         vsync(1);
-        /* st_play_song();
-    /*music_update();*/
       }
 
       silence();
-      /*count=0;*/
 
-      switch (select)
+      switch (l_select)
       {
         case 2:
-          monsterID=0;
+          g_monsterID=0;
           cd_execoverlay(OVL_BATTLE);
           break;
 
         case 1:
-          strcpy(Entry,NamP1);
-          enter();
-          strcpy(NamP1,Entry);
-          strcpy(Entry,NamP2);
-          enter();
-          strcpy(NamP2,Entry);
-          strcpy(Entry,NamP3);
-          enter();
-          strcpy(NamP3,Entry);
-          strcpy(Entry,NamP4);
-          enter();
-          strcpy(NamP4,Entry);
+          rpg_changeName(g_nameP1);
+          rpg_changeName(g_nameP2);
+          rpg_changeName(g_nameP3);
+          rpg_changeName(g_nameP4);
           break;
 
         case 0:
-          battleEnd=1;
+          g_battleEnd=1;
           game();
           break;
       }
     }
-  }
-  else
+  } else {
+    /* if coming back from a battle, directly go to the game mode */
     game();
+  }
 
 }
 
 /*******************************************/
 /*               Name Change               */
 /*******************************************/
-enter()
+rpg_changeName(p_name)
+char* p_name;
 {
   char i,j,k;
+  char l_entry[7];
+  
+  strcpy(l_entry,p_name);
+  
   cls();
-  border(0,0,32,28);
-  border(11,10,8,3);
+  cadre_border(0,0,32,28);
+  cadre_border(11,10,8,3);
 
   put_string("Enter player name",7,4);
-  border(6,3,19,3);
+  cadre_border(6,3,19,3);
 
-  border(2,20,28,6);
+  cadre_border(2,20,28,6);
   for(i='A';i<'Z'+1;i++)
   {
     put_char(i,3+i-'A',21);
@@ -151,7 +146,7 @@ enter()
   i=0;
   j=0;
   k=0;
-  Entry[6]=0;
+  l_entry[6]=0;
   put_char('^',12+k,13);
 
   while (!(joytrg(0) & JOY_STRT))
@@ -163,13 +158,15 @@ enter()
     }
 
     if ((joytrg(0) & JOY_B) && (k>0))
-    {Entry[k]=0;
-    put_char(' ',12+k,13);
-    k--;
-    put_char('^',12+k,13);}
+    {
+      l_entry[k]=0;
+      put_char(' ',12+k,13);
+      k--;
+      put_char('^',12+k,13);
+    }
 
     if (joytrg(0) & JOY_A) {
-      Entry[k]=i+'A'+j*('a'-'A');
+      l_entry[k]=i+'A'+j*('a'-'A');
       if (k<5) {
         put_char(' ',12+k,13);
         k++;
@@ -182,14 +179,16 @@ enter()
       j++;
     }
 
+  
     put_string("      ",12,11);
-    put_string(Entry,12,11);
-    blank(3,22,26,1);
-    blank(3,24,26,1);
+    put_string(l_entry,12,11);
+    cadre_blank(3,22,26,1);
+    cadre_blank(3,24,26,1);
     put_char('^',3+i,22+2*j);
     vsync(1);
   }
 
+  strcpy(p_name, l_entry);
   return;
 }
 /************************************************/
@@ -201,28 +200,3 @@ enter()
 /***********************************************/
 #include "cadre.c"
 /***********************************************/
-
-/***************************************/
-/*             String copy             */
-/***************************************/
-/*strcpy(lhs,rhs)
-char* lhs;
-char* rhs;
-{
-  while (*rhs)
- *lhs++=*rhs++;
- *lhs=0;
-
-}*/
-
-/***************************************/
-/*            Absolute valor           */
-/***************************************/
-/*abs(x)
-int x;
-{
-if (x<0)
-  return -x;
-else
-  return x;
-}*/
