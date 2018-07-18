@@ -1,6 +1,7 @@
 char g_nameP1[7],g_nameP2[7],g_nameP3[7],g_nameP4[7]; /* name Player 1-4 */
 STAT_TYPE g_dexP[4],g_atkP[4],g_defP[4];
 unsigned int g_expP[4]; /* carac Player 1-4*/
+char g_activePlayer[4]; /* flag to indicate if the player is available or not */
 unsigned int g_spriteX;
 unsigned int g_spriteY;
 int g_hp[4];

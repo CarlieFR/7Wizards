@@ -12,6 +12,7 @@
 #include "silence.c"
 #include "cadre.c"
 #include "itemeffect.c"
+#include "util.c"
 
 /********************************/
 #include "graphbattle.c"
@@ -72,7 +73,7 @@ main()
 
     for(i=0;i<4;i++)
     {
-      if (g_hp[i])
+      if (g_activePlayer[i])
       {
         g_battleX[i]=200;
         g_battleY[i]=16+(i+1)*32;
@@ -104,37 +105,37 @@ main()
     spr_y(g_battleY[4]);
     spr_show();
 
-    while ((g_hp[0]>0) && (g_hp[1]>0) && (l_life_enemy>0))
+    while ((!g_activePlayer[0] || g_hp[0]>0) && (!g_activePlayer[1] || g_hp[1]>0)
+            && (!g_activePlayer[2] || g_hp[2]>0) && (!g_activePlayer[3] || g_hp[3]>0)
+            && (l_life_enemy>0))
     {
-      graphbattle_fightframe(l_life_enemy,turn);
       turn=battle_selectNextTurn(l_dexN);
+      graphbattle_fightframe(l_life_enemy,turn);
       satb_update();
 
       switch(turn)
       {
         /*    PLAYER 1    */
         case 0:
-
           battle_playerAction(g_nameP1, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
           break;
 
-          /*    PLAYER 2    */
+        /*    PLAYER 2    */
         case 1:
-
           battle_playerAction(g_nameP2, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
           break;
 
-          /*    PLAYER 3    */
-          /*  case 2:
-
+        /*    PLAYER 3    */
+        case 2:
           battle_playerAction(g_nameP3, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
+          break;
 
-  /*    PLAYER 4    */
-          /*  case 3:
-
+        /*    PLAYER 4    */
+        case 3:
           battle_playerAction(g_nameP4, turn, &l_life_enemy,l_defN,l_dexN,l_enemyres);
+          break;
 
-  /*      ENEMY 1      */
+        /*      ENEMY 1      */
         case 4:
           spr_set(FIGHT_CHAR_SPR+4);
           cadre_blank(1,23,8,4);
@@ -151,11 +152,19 @@ main()
           cadre_blank(1,1,30,1);
           put_string("Enemy attacks",3,1);
 
-          target=rand()%2;
-          while(g_hp[target]<1) target=rand()%2;
+          target=rand()%4;
+          while(!g_activePlayer[target] || g_hp[target]<1) target=rand()%4;
 
-          for(i=0;i<5;i++) {spr_x(spr_get_x()+1); vsync(); satb_update();}
-          for(i=0;i<5;i++) {spr_x(spr_get_x()-1); vsync(); satb_update();}
+          for(i=0;i<5;i++) {
+            spr_x(spr_get_x()+1);
+            vsync();
+            satb_update();
+            }
+          for(i=0;i<5;i++) {
+            spr_x(spr_get_x()-1);
+            vsync();
+            satb_update();
+            }
           l_wound=battle_fight(l_atkN,l_dexN,g_defP[target],g_dexP[target]);
           if (l_wound)
           {
@@ -179,7 +188,9 @@ main()
 
     graphbattle_fightframe(l_life_enemy,4);
     for(i=0;i<4;i++) {
-      put_number(g_hp[i],5,25,23+i);
+      if (g_activePlayer[i]) {
+        put_number(g_hp[i],5,25,23+i);
+      }
     }
     /* For debug purpose only */
     put_number(l_life_enemy,5,25,21);
@@ -329,10 +340,10 @@ RESIST_TYPE p_enemyres;
       l_basePattern = PLAYER2PTR;
       break;
     case 2 :
-      l_basePattern = PLAYER1PTR;
+      l_basePattern = PLAYER2PTR;
       break;
     case 3 :
-      l_basePattern = PLAYER1PTR;
+      l_basePattern = PLAYER2PTR;
       break;
   }
 
@@ -533,7 +544,8 @@ int p_exp;
   char i,l_continu;
   l_continu=1;
 
-  if ((g_hp[0]>0) || (g_hp[1]>0))
+  if ((g_activePlayer[0] && g_hp[0]>0) || (g_activePlayer[1] && g_hp[1]>0)
+       || (g_activePlayer[2] && g_hp[2]>0) || (g_activePlayer[3] && g_hp[3]>0))
   {
     put_string("You won",8,1);
     vsync(60);
@@ -541,7 +553,9 @@ int p_exp;
     put_string("Got",1,1);
     put_number(p_exp,5,5,1);
     put_string("experience point(s)",11,1);
-    for(i=0;i<4;i++) g_expP[i]+=p_exp;
+    for(i=0;i<4;i++) {
+      g_expP[i]+=p_exp;
+    }
     vsync(60);
     while(!(joy(0)));
     return 0;
@@ -590,35 +604,31 @@ STAT_TYPE p_dexMonster;
   {
     for(i=0;i<4;i++)
     {
-      if(g_hp[i]>0)
-      {
-        g_roundCount[i] += g_dexP[i];
-        if(g_roundCount[i]>3520) l_next=i;
-      }
-      spr_set(BARBASESPR+(i<<1));
-      if((g_roundCount[i]>>7)<14)
-      {
-        spr_pattern(ACTIONBARPTR+0x40*(g_roundCount[i]>>7));
-      }
-      else
-      {
-        spr_pattern(ACTIONBARPTR+0x340);
-      }
-      spr_set(BARBASESPR+(i<<1)+1);
-      if((g_roundCount[i]>>7)<14)
-      {
-        spr_pattern(ACTIONBARPTR+0x380);
-      }
-      else
-      {
-        if(g_roundCount[i]<=3520)
-        {
+      if (g_activePlayer[i]) {
+        if(g_hp[i]>0) {
+          g_roundCount[i] += g_dexP[i];
+          if(g_roundCount[i]>3520) {
+            l_next=i;
+          }
+        }
+        spr_set(BARBASESPR+(i<<1));
+        if((g_roundCount[i]>>7)<14) {
+          spr_pattern(ACTIONBARPTR+0x40*(g_roundCount[i]>>7));
+        }
+        else {
+          spr_pattern(ACTIONBARPTR+0x340);
+        }
+        spr_set(BARBASESPR+(i<<1)+1);
+        if((g_roundCount[i]>>7)<14) {
+          spr_pattern(ACTIONBARPTR+0x380);
+        }
+        else if(g_roundCount[i]<=3520) {
           spr_pattern(ACTIONBARPTR+0x380+0x40*((g_roundCount[i]>>7)-14));
         }
-        else
-        {
+        else {
           spr_pattern(ACTIONBARPTR+0x380+0x340);
         }
+      
       }
     }
     g_roundCount[4] += p_dexMonster;
@@ -642,39 +652,33 @@ STAT_TYPE p_dexMonster;
 
   for(i=0;i<4;i++)
   {
-    g_roundCount[i] = rand() % g_dexP[i];
-    spr_set(BARBASESPR+(i<<1));
-    spr_pri(1);
-    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-    spr_pal(BARPAL);
-    spr_x(152);
-    spr_y(184+(i<<3));
-    if((g_roundCount[i]>>7)<14)
-    {
-      spr_pattern(ACTIONBARPTR+0x40*(g_roundCount[i]>>7));
-    }
-    else
-    {
-      spr_pattern(ACTIONBARPTR+0x340);
-    }
-    spr_set(BARBASESPR+(i<<1)+1);
-    spr_pri(1);
-    spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
-    spr_pal(BARPAL);
-    spr_x(168);
-    spr_y(184+(i<<3));
-    if((g_roundCount[i]>>7)<14)
-    {
-      spr_pattern(ACTIONBARPTR+0x380);
-    }
-    else
-    {
-      if(g_roundCount[i]<=3520)
-      {
+    if (g_activePlayer[i]) {
+      g_roundCount[i] = rand() % g_dexP[i];
+      spr_set(BARBASESPR+(i<<1));
+      spr_pri(1);
+      spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+      spr_pal(BARPAL);
+      spr_x(152);
+      spr_y(184+(i<<3));
+      if((g_roundCount[i]>>7)<14) {
+        spr_pattern(ACTIONBARPTR+0x40*(g_roundCount[i]>>7));
+      }
+      else {
+        spr_pattern(ACTIONBARPTR+0x340);
+      }
+      spr_set(BARBASESPR+(i<<1)+1);
+      spr_pri(1);
+      spr_ctrl(FLIP_MAS | SIZE_MAS,NO_FLIP | SZ_16x16);
+      spr_pal(BARPAL);
+      spr_x(168);
+      spr_y(184+(i<<3));
+      if((g_roundCount[i]>>7)<14) {
+        spr_pattern(ACTIONBARPTR+0x380);
+      }
+      else if(g_roundCount[i]<=3520) {
         spr_pattern(ACTIONBARPTR+0x380+0x40*((g_roundCount[i]>>7)-14));
       }
-      else
-      {
+      else {
         spr_pattern(ACTIONBARPTR+0x380+0x340);
       }
 

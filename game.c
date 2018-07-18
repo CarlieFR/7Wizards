@@ -91,17 +91,17 @@ while (1)
   vsync();
 
   i=0;
-  put_char('>',24,2+i<<1);
+  put_char('>',24,2+(i<<1));
   while(!(joytrg(0) & (JOY_A | JOY_STRT | JOY_B))) {
     if ((joytrg(0) & JOY_DOWN) && (i<3)) {
-      put_char(' ',24,2+i<<1);
+      put_char(' ',24,2+(i<<1));
       i++;
-      put_char('>',24,2+i<<1);
+      put_char('>',24,2+(i<<1));
     }
     if ((joytrg(0) & JOY_UP) && (i>0)) {
-      put_char(' ',24,2+i<<1);
+      put_char(' ',24,2+(i<<1));
       i--;
-      put_char('>',24,2+i<<1);
+      put_char('>',24,2+(i<<1));
     }
     vsync(1);
   }
@@ -340,20 +340,30 @@ game_showGlobalStatus()
 {
   char i;
 
-  put_string(g_nameP1,2,2);
-  put_string(g_nameP2,2,8);
-  put_string(g_nameP3,2,14);
-  put_string(g_nameP4,2,20);
+  if (g_activePlayer[0]) {
+    put_string(g_nameP1,2,2);
+  }
+  if (g_activePlayer[1]) {
+    put_string(g_nameP2,2,8);
+  }
+  if (g_activePlayer[2]) {
+    put_string(g_nameP3,2,14);
+  }
+  if (g_activePlayer[3]) {
+    put_string(g_nameP4,2,20);
+  }
 
   for(i=0;i<4;i++) {
-    put_string("HP :",4,4+i*6);
-    put_string("MP :",4,6+i*6);
-    put_number(g_hp[i],4,9,4+i*6);
-    put_number(g_mp[i],4,9,6+i*6);
-    put_char('/',13,4+i*6);
-    put_char('/',13,6+i*6);
-    put_number(g_maxHP[i],4,14,4+i*6);
-    put_number(g_maxMP[i],4,14,6+i*6);
+    if (g_activePlayer[i]) {
+      put_string("HP :",4,4+i*6);
+      put_string("MP :",4,6+i*6);
+      put_number(g_hp[i],4,9,4+i*6);
+      put_number(g_mp[i],4,9,6+i*6);
+      put_char('/',13,4+i*6);
+      put_char('/',13,6+i*6);
+      put_number(g_maxHP[i],4,14,4+i*6);
+      put_number(g_maxMP[i],4,14,6+i*6);
+    }
   }
 
 }
@@ -367,14 +377,14 @@ game_menuSelectPlayer()
   i=0;
   put_char('>',1,2+6*i);
   while(!(joytrg(0) & (JOY_B | JOY_A))) {
-    if ((joytrg(0) & JOY_UP) && (i>0)) {
+    if (joytrg(0) & JOY_UP) {
       put_char(' ',1,2+6*i);
-      i--;
+      i = util_selectPrevPlayer(i);
       put_char('>',1,2+6*i);
     }
-    if ((joytrg(0) & JOY_DOWN) && (i<3)){
+    if (joytrg(0) & JOY_DOWN){
       put_char(' ',1,2+6*i);
-      i++;
+      i = util_selectNextPlayer(i);
       put_char('>',1,2+6*i);
     }
     vsync();

@@ -16,7 +16,7 @@ EXE = 7WizardS.iso
 7WizardS.ovl : 7WizardS.c const.c var.c
 	$(CC) $(CFLAGS) $(LIBS) 7WizardS.c
 
-rpg.ovl : rpg.c move.c game.c const.c var.c map.c graph.c Merry.asm text.c silence.c TestMelancholia.asm
+rpg.ovl : rpg.c move.c game.c const.c var.c map.c graph.c Merry.asm text.c silence.c util.c TestMelancholia.asm
 	$(CC) $(CFLAGS) $(LIBS) rpg.c
 
 battle.ovl : battle.c magic.c const.c var.c graphbattle.c TestFight.asm silence.c

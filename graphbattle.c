@@ -84,16 +84,26 @@ char p_turn;
   cadre_blank(1,23,30,4);
   cadre_border(10,22,22,6);
   
-  put_string(g_nameP1,12,23);
-  put_string(g_nameP2,12,24);
-  put_string(g_nameP3,12,25);
-  put_string(g_nameP4,12,26);
+  if (g_activePlayer[0]) {
+    put_string(g_nameP1,12,23);
+  }
+  if (g_activePlayer[1]) {
+    put_string(g_nameP2,12,24);
+  }
+  if (g_activePlayer[2]) {
+    put_string(g_nameP3,12,25);
+  }
+  if (g_activePlayer[3]) {
+    put_string(g_nameP4,12,26);
+  }
   if (DEBUG) {
     put_string("Enemy",12,21);
   }
   
   for(i=0;i<4;i++) {
-    put_number(g_hp[i],5,25,23+i);
+    if (g_activePlayer[i]) {
+      put_number(g_hp[i],5,25,23+i);
+    }
   }
   if (DEBUG) {
     put_number(p_life_enemy,5,25,21);

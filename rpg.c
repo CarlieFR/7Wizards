@@ -10,6 +10,7 @@
 #include "var.c"
 #include "text.c"
 #include "silence.c"
+#include "util.c"
 
 #incasm("TestMelancholia.asm")
 extern struct st_header TestMelancholia[];
@@ -33,83 +34,83 @@ main()
 
     g_first_time_map4 = 1;
 
-   /* while(1)*/
+    g_hp[0]=g_maxHP[0];
+    g_hp[1]=g_maxHP[1];
+    g_hp[2]=g_maxHP[2];
+    g_hp[3]=g_maxHP[3];
+    g_itemnb[0]=5;
+    g_itemnb[1]=2;
+    g_mp[0]=g_maxMP[0];
+    g_mp[1]=g_maxMP[1];
+    g_mp[2]=g_maxMP[2];
+    g_mp[3]=g_maxMP[3];
+    g_expP[0]=10;
+    g_expP[1]=10;
+    l_select=0;
+    /* Music initialisation*/
+    st_set_song(bank(TestMelancholia), TestMelancholia);
+
+    st_reset();
+
+    load_background(titlegfx,titlepal,titlebat,32,28);
+
+    init_satb();
+    load_sprites(0X6000,sprgfx,2);
+    load_sprites(PLAYER1PTR,p1gfx,2);
+    load_sprites(PLAYER2PTR,p2gfx,2);
+
+    set_sprpal(SPRITEPAL,spritepal);
+    set_sprpal(P1PAL,p1pal);
+    set_sprpal(P2PAL,p2pal);
+    spr_set(MAGICSPR);
+    spr_pri(1);
+    spr_hide();
+    put_string("Start a battle",11,22);
+    put_string("Change name",11,20);
+    put_string("Begin game",11,18);
+    put_char('-',9,18);
+
+    st_song_repeat_on();
+    st_play_song();
+
+    while (!(joytrg(0) & (JOY_STRT | JOY_A | JOY_B)))
     {
-      g_hp[0]=g_maxHP[0];
-      g_hp[1]=g_maxHP[1];
-      g_hp[2]=0;
-      g_hp[3]=0;
-      g_itemnb[0]=5;
-      g_itemnb[1]=2;
-      g_mp[0]=g_maxMP[0];
-      g_mp[1]=g_maxMP[1];
-      g_expP[0]=10;
-      g_expP[1]=10;
-      l_select=0;
-      /* Music initialisation*/
-      st_set_song(bank(TestMelancholia), TestMelancholia);
-
-      st_reset();
-
-      load_background(titlegfx,titlepal,titlebat,32,28);
-
-      init_satb();
-      load_sprites(0X6000,sprgfx,2);
-      load_sprites(PLAYER1PTR,p1gfx,2);
-      load_sprites(PLAYER2PTR,p2gfx,2);
-
-      set_sprpal(SPRITEPAL,spritepal);
-      set_sprpal(P1PAL,p1pal);
-      set_sprpal(P2PAL,p2pal);
-      spr_set(MAGICSPR);
-      spr_pri(1);
-      spr_hide();
-      put_string("Start a battle",11,22);
-      put_string("Change name",11,20);
-      put_string("Begin game",11,18);
-      put_char('-',9,18);
-
-      st_song_repeat_on();
-      st_play_song();
-
-      while (!(joytrg(0) & (JOY_STRT | JOY_A | JOY_B)))
+      if ((joytrg(0) & JOY_UP) && (l_select>0))
       {
-        if ((joytrg(0) & JOY_UP) && (l_select>0))
-        {
-          l_select--;
-          put_char(' ',9,20+2*l_select);
-          put_char('-',9,18+2*l_select);
-        }
-        if ((joytrg(0) & JOY_DOWN) && (l_select<2))
-        {
-          l_select++;
-          put_char(' ',9,16+2*l_select);
-          put_char('-',9,18+2*l_select);
-        }
-        vsync(1);
+        l_select--;
+        put_char(' ',9,20+2*l_select);
+        put_char('-',9,18+2*l_select);
       }
-
-      silence();
-
-      switch (l_select)
+      if ((joytrg(0) & JOY_DOWN) && (l_select<2))
       {
-        case 2:
-          g_monsterID=0;
-          cd_execoverlay(OVL_BATTLE);
-          break;
-
-        case 1:
-          rpg_changeName(g_nameP1);
-          rpg_changeName(g_nameP2);
-          rpg_changeName(g_nameP3);
-          rpg_changeName(g_nameP4);
-          break;
-
-        case 0:
-          g_battleEnd=1;
-          game();
-          break;
+        l_select++;
+        put_char(' ',9,16+2*l_select);
+        put_char('-',9,18+2*l_select);
       }
+      vsync(1);
+    }
+
+    silence();
+
+    switch (l_select)
+    {
+      case 2:
+        g_monsterID=0;
+        cd_execoverlay(OVL_BATTLE);
+        break;
+
+      case 1:
+        rpg_changeName(g_nameP1);
+        rpg_changeName(g_nameP2);
+        rpg_changeName(g_nameP3);
+        rpg_changeName(g_nameP4);
+        cd_execoverlay(OVL_RPG);
+        break;
+
+      case 0:
+        g_battleEnd=1;
+        game();
+        break;
     }
   } else {
     /* if coming back from a battle, directly go to the game mode */
